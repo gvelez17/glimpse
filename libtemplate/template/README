@@ -1,0 +1,6 @@
+This directory holds the SOIF template processing library as well as some
+other utilities for manipulating SOIF templates.
+
+template.c is the SOIF template library; everything else is related.
+
+-Darren Hardy, June 1994

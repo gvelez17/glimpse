@@ -1,0 +1,6 @@
+all:
+
+install:
+
+clean:
+	-rm -f *.a core

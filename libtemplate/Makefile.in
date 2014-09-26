@@ -1,0 +1,47 @@
+#
+#  Makefile for the common source directory
+#
+#  $Id: Makefile.in,v 1.2 2001/05/21 04:48:55 golda Exp $
+#
+SUBDIRS		= util template lib
+DEBUG_TOP	= #-O #-g #-DDEBUG
+
+srcdir = @srcdir@
+VPATH  = @srcdir@
+prefix = /usr/local/harvest
+INSTALL_BINDIR	= $(prefix)/bin
+INSTALL_LIBDIR	= $(prefix)/lib
+INSTALL_MANDIR 	= $(prefix)/man
+
+SHELL		= /bin/sh
+CC		= @CC@
+INSTALL		= @INSTALL@
+INSTALL_BIN 	= @INSTALL_PROGRAM@
+INSTALL_FILE 	= @INSTALL_DATA@
+RANLIB		= @RANLIB@
+LN_S		= @LN_S@
+XTRA_LIBS	= @XTRA_LIBS@
+
+# old variables for backward compatability
+INSTALLDIR 	= $(INSTALL_BINDIR)
+INSTALL_SCRIPT 	= $(INSTALL_BIN)
+
+INSTALL_DIRS	= $(prefix) $(INSTALL_BINDIR) $(INSTALL_LIBDIR) \
+		  $(INSTALL_MANDIR)
+
+default: all
+
+all install clean:
+	@for dir in $(SUBDIRS); do \
+		echo Making $@ in $$dir; \
+		( cd $$dir; $(MAKE) $@ ); \
+	done
+
+distclean realclean:
+	@for dir in $(SUBDIRS); do \
+		echo Making $@ in $$dir; \
+		( cd $$dir; $(MAKE) $@ ); \
+	done
+	rm -f Makefile
+
+install-man:

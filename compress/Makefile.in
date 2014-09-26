@@ -1,0 +1,89 @@
+#/* Copyright (c) 1994 Burra Gopal, Udi Manber.  All Rights Reserved. */
+# Makefile for the compress library -- agrep should be linked with it in case
+# it wants to search for patterns in a compressed file.
+
+# YOU DON'T HAVE TO CHANGE ANYTHING BELOW THIS LINE
+
+srcdir = @srcdir@
+VPATH  = @srcdir@
+SHELL  = /bin/sh
+CC     = @CC@
+AR     = @AR@
+RANLIB = @RANLIB@
+CP     = @CP@
+STRIP  = @STRIP@
+INSTALL		= @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA	= @INSTALL_DATA@
+DEFS		=
+
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+binprefix =
+manprefix =
+
+bindir = $(exec_prefix)/bin
+libdir = $(exec_prefix)/lib
+mandir = $(prefix)/man/man1
+manext = 1
+
+# YOU DON'T HAVE TO CHANGE ANYTHING BELOW THIS LINE
+
+INDEXDIR = ../index
+AGREPDIR = ../agrep
+LIBDIR = ../lib
+BIN = ../bin
+TEMPLATEDIR   = ../libtemplate
+
+OPTIMIZEFLAGS	= -O2
+INCLUDEFLAGS	= -I$(INDEXDIR) -I$(AGREPDIR) -I$(TEMPLATEDIR)/include
+CFLAGS		= $(INCLUDEFLAGS) $(OPTIMIZEFLAGS)
+LDFLAGS		=
+OTHERLIBS	=
+
+LIBOBJ = hash.o string.o misc.o quick.o cast.o uncast.o tsimpletest.o tmemlook.o tbuild.o
+LIB = $(LIBDIR)/libcast.a
+
+all: $(LIB) tbuild cast uncast
+
+install: all
+	for i in tbuild cast uncast ; do \
+		$(INSTALL) $$i $(bindir) ; \
+	done
+
+install-man:
+
+clean:
+	rm -f *.o $(LIB) core test cast uncast tbuild a.out
+
+distclean: clean
+	rm -f Makefile
+
+$(LIB): $(LIBOBJ)
+	$(AR) rcv $(LIB) $(LIBOBJ)
+	$(RANLIB) $(LIB)
+
+test: hash.o string.o misc.o test.o quick.o tsimpletest.o tmemlook.o cast.o uncast.o
+	 $(CC) $(LDFLAGS) -o test hash.o string.o misc.o test.o quick.o tsimpletest.o tmemlook.o cast.o uncast.o $(OTHERLIBS)
+
+tbuild: hash.o string.o misc.o tbuild.o main_tbuild.o defs.h
+	 $(CC) $(LDFLAGS) -o tbuild hash.o string.o misc.o tbuild.o main_tbuild.o $(OTHERLIBS)
+
+cast: main_cast.o $(LIB)
+	 $(CC) $(LDFLAGS) -o cast main_cast.o $(LIBOBJ) $(OTHERLIBS)
+
+uncast: main_uncast.o $(LIB)
+	$(CC) $(LDFLAGS) -o uncast main_uncast.o $(LIBOBJ) $(OTHERLIBS)
+
+hash.o: defs.h $(INDEXDIR)/glimpse.h
+string.o: defs.h $(INDEXDIR)/glimpse.h
+misc.o: defs.h $(INDEXDIR)/glimpse.h
+quick.o: defs.h $(INDEXDIR)/glimpse.h
+cast.o: defs.h $(INDEXDIR)/glimpse.h
+uncast.o: defs.h $(INDEXDIR)/glimpse.h
+main_cast.o: defs.h $(INDEXDIR)/glimpse.h
+main_uncast.o: defs.h $(INDEXDIR)/glimpse.h
+tsimpletest.o: defs.h $(INDEXDIR)/glimpse.h
+tmemlook.o: defs.h $(INDEXDIR)/glimpse.h
+test.o : test.c
+

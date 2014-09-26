@@ -1,0 +1,43 @@
+* Thu Aug 20 14:56:44 1998
+
+agrep -v fails to write anything unless at least one line (possibly, a
+particular line) of the input matches the pattern that we're trying to
+mismatch.  The non-glimpse agrep does not have this problem.  E.g.:
+
+thalia[189]$ for p in O e n w o r ; do echo "Pattern '${p}':" ; echo "One@Two@Three" | tr '@' '\012'  | agrep -v ${p} ; done
+Pattern 'O':
+Pattern 'e':
+Two
+Pattern 'n':
+Pattern 'w':
+One
+Pattern 'o':
+One
+Pattern 'r':
+One
+Two
+
+thalia[190]$ for p in O e n w o r ; do echo "Pattern '${p}':" ; echo "One@Two@Three" | tr '@' '\012'  | agrep-2.04 -v ${p} ; done
+Pattern 'O':
+Two
+Three
+Pattern 'e':
+Two
+Pattern 'n':
+Two
+Three
+Pattern 'w':
+One
+Three
+Pattern 'o':
+One
+Three
+Pattern 'r':
+One
+Two
+
+The non-glimpse agrep uses bitap to do the search; the glimpse one uses bm.
+Some pre-condition is unsatisfied in the call to bm, because it overruns the
+input text buffer by a huge amount in attempting to find a pattern match.
+
+It isn't obvious to me where this bug is arising, or how to fix it.

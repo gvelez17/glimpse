@@ -1,0 +1,48 @@
+#
+#  Makefile for the utilities source directory 
+#
+#  $Id: Makefile.linux,v 1.1 1999/11/03 20:42:14 golda Exp $
+#
+prefix = /usr/local/harvest
+INSTALL_BINDIR	= $(prefix)/bin
+INSTALL_LIBDIR	= $(prefix)/lib
+INSTALL_MANDIR 	= $(prefix)/man
+
+SHELL		= /bin/sh
+CC		= gcc -m486
+INSTALL		= cp #install -c
+INSTALL_BIN 	= ${INSTALL}
+INSTALL_FILE 	= ${INSTALL} #-m 644
+RANLIB		= ranlib
+
+DEBUG		= $(DEBUG_TOP) #-O #-g #-DDEBUG
+INCLUDE		= -I../include
+CFLAGS		= $(DEBUG) $(INCLUDE)
+
+LIBFILE		= libutil.a 
+LIBDIR		= ../lib
+OBJS		= buffer.o host.o log.o strdup.o system.o strerror.o \
+		  string.o xmalloc.o
+
+all:	$(LIBFILE) install-lib
+
+ctags:
+	@ctags -w *.c 
+
+clean:
+	-rm -f core *.o $(LIBFILE) tags 
+
+#realclean:	clean
+#	-rm -rf Makefile
+
+install:	install-lib
+
+install-lib:	$(LIBDIR)/$(LIBFILE)
+
+$(LIBDIR)/$(LIBFILE):	$(LIBFILE)
+	$(INSTALL_FILE) $(LIBFILE) $(LIBDIR)/$(LIBFILE)
+	$(RANLIB) $(LIBDIR)/$(LIBFILE)
+
+$(LIBFILE):	$(OBJS)
+	ar r $(LIBFILE) $(OBJS)
+	$(RANLIB) $(LIBFILE)

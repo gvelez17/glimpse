@@ -1,0 +1,152 @@
+# Copyright (c) 1994 Sun Wu, Udi Manber, Burra Gopal.  All Rights Reserved.
+
+srcdir = @srcdir@
+VPATH  = @srcdir@
+SHELL  = /bin/sh
+CC     = @CC@
+LIBS   = @LIBS@
+AR     = @AR@
+RANLIB = @RANLIB@
+CP     = @CP@
+STRIP  = @STRIP@
+INSTALL		= @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA	= @INSTALL_DATA@
+DEFS		=
+
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+binprefix =
+manprefix =
+
+bindir = $(exec_prefix)/bin
+libdir = $(exec_prefix)/lib
+mandir = $(prefix)/man/man1
+manext = 1
+
+# YOU DON'T HAVE TO CHANGE ANYTHING BELOW THIS LINE
+
+# The binaries will be made in ../bin/. and the agrep library is assumed to
+# be in ../lib . You normally don't have to change them.
+# NOTE: INDEXDIR can be a relative or absolute path name.
+BINDIR		= ../bin
+AGREPDIR	= ../agrep
+INDEXDIR	= ../index
+TEMPLATEDIR	= ../libtemplate
+LIBAGREPDIR	= ../lib
+LIBTEMPLATEDIR	= $(TEMPLATEDIR)/lib
+LIBAGREP	= agrep
+LIBTEMPLATE	= template
+LIBUTIL		= util
+
+PROG		= glimpseindex
+NOTSPROG	= nots$(PROG)
+CASTPROG	= buildcast
+NOTSCASTPROG	= nots$(CASTPROG)
+
+OPTIMIZEFLAGS	= -O2
+INCLUDEFLAGS	= -I$(INDEXDIR) -I$(AGREPDIR) -I$(TEMPLATEDIR)/include 
+DEFINEFLAGS	= $(DEFS)
+CFLAGS		= $(INCLUDEFLAGS)
+
+TEST	      =	test
+OBJS	      =	region.o \
+		dir.o	\
+		io.o\
+		build_in.o		\
+		filetype.o	\
+		simpletest.o\
+		getword.o	\
+		memlook.o		\
+		lib.o	\
+		partition.o	
+
+all:	@TARGET@
+
+Sall:		$(CASTPROG) $(PROG) wgconvert
+
+NOTSall:	$(NOTSCASTPROG) $(NOTSPROG) notswgconvert
+
+install: all install-man
+	for i in $(BINDIR)/$(CASTPROG) $(BINDIR)/$(PROG) $(BINDIR)/wgconvert ; do \
+		$(INSTALL) $$i $(bindir) ; \
+	done
+
+install-man:
+
+clean:
+	rm -f $(OBJS) glimpse.o convert.o buildcast.o buildcast.c core a.out $(PROG) $(CASTPROG) wgconvert
+
+distclean: clean
+	rm -f Makefile
+
+#$(TEST):	test.o $(LIBTEMPLATEDIR)/lib$(LIBTEMPLATE).a $(LIBTEMPLATEDIR)/lib$(LIBUTIL).a
+#	$(CC) $(LDFLAGS) -L$(LIBTEMPLATEDIR) -o $@ test.c -l$(LIBTEMPLATE) -l$(LIBUTIL) 
+
+$(CASTPROG):	buildcast.o $(OBJS) $(LIBAGREPDIR)/lib$(LIBAGREP).a $(LIBTEMPLATEDIR)/lib$(LIBTEMPLATE).a $(LIBTEMPLATEDIR)/lib$(LIBUTIL).a
+	$(CC) $(LDFLAGS) -L$(LIBAGREPDIR) -L$(LIBTEMPLATEDIR) -o $(BINDIR)/$(CASTPROG) buildcast.o $(OBJS) -l$(LIBAGREP) -l$(LIBTEMPLATE) -l$(LIBUTIL) $(LIBS)
+
+$(NOTSCASTPROG):	buildcast.o $(OBJS) $(LIBAGREPDIR)/lib$(LIBAGREP).a
+	$(CC) $(LDFLAGS) -L$(LIBAGREPDIR) -o $(BINDIR)/$(CASTPROG) buildcast.o $(OBJS) -l$(LIBAGREP) $(LIBS) 
+
+$(PROG):	glimpse.o $(OBJS) $(LIBAGREPDIR)/lib$(LIBAGREP).a $(LIBTEMPLATEDIR)/lib$(LIBTEMPLATE).a $(LIBTEMPLATEDIR)/lib$(LIBUTIL).a
+	$(CC) $(LDFLAGS) -L$(LIBAGREPDIR) -L$(LIBTEMPLATEDIR) -o $(BINDIR)/$(PROG) glimpse.o $(OBJS) -l$(LIBAGREP) -l$(LIBTEMPLATE) -l$(LIBUTIL) $(LIBS)
+
+$(NOTSPROG):	glimpse.o $(OBJS) $(LIBAGREPDIR)/lib$(LIBAGREP).a
+	$(CC) $(LDFLAGS) -L$(LIBAGREPDIR) -o $(BINDIR)/$(PROG) glimpse.o $(OBJS) -l$(LIBAGREP) $(LIBS) 
+
+wgconvert:	convert.o io.o simpletest.o filetype.o region.o memlook.o getword.o $(LIBAGREPDIR)/lib$(LIBAGREP).a $(LIBTEMPLATEDIR)/lib$(LIBTEMPLATE).a $(LIBTEMPLATEDIR)/lib$(LIBUTIL).a
+	$(CC) $(LDFLAGS) -L$(LIBAGREPDIR) -L$(LIBTEMPLATEDIR) -o $(BINDIR)/wgconvert convert.o io.o simpletest.o filetype.o region.o memlook.o getword.o -l$(LIBAGREP) -l$(LIBTEMPLATE) -l$(LIBUTIL) $(LIBS)
+
+notswgconvert:	convert.o io.o simpletest.o filetype.o region.o memlook.o getword.o $(LIBAGREPDIR)/lib$(LIBAGREP).a
+	$(CC) $(LDFLAGS) -L$(LIBAGREPDIR) -o $(BINDIR)/wgconvert convert.o io.o simpletest.o filetype.o region.o memlook.o getword.o -l$(LIBAGREP) $(LIBS)
+
+$(LIBTEMPLATEDIR)/lib$(LIBTEMPLATE).a:
+	cd $(TEMPLATEDIR) ; $(MAKE)
+
+$(LIBTEMPLATEDIR)/lib$(LIBUTIL).a:
+	cd $(TEMPLATEDIR) ; $(MAKE)
+
+$(LIBAGREPDIR)/lib$(LIBAGREP).a:
+	cd $(AGREPDIR) ; $(MAKE)
+
+region.o: region.c region.h
+	$(CC) -c $(CFLAGS) region.c
+
+getword.o: getword.c
+	$(CC) -c $(CFLAGS) getword.c
+
+dir.o: dir.c
+	$(CC) -c $(CFLAGS) dir.c
+
+lib.o: lib.c
+	$(CC) -c $(CFLAGS) lib.c
+
+partition.o: partition.c
+	$(CC) -c $(CFLAGS) partition.c
+
+glimpse.o: glimpse.c glimpse.h region.h
+	$(CC) -c $(CFLAGS) -DBUILDCAST=0 glimpse.c
+
+buildcast.o: glimpse.c glimpse.h region.h
+	rm -f buildcast.c
+	cp glimpse.c buildcast.c
+	$(CC) -c $(CFLAGS) -DBUILDCAST=1 -o buildcast.o buildcast.c
+
+io.o: io.c
+	$(CC) -c $(CFLAGS) io.c
+
+build_in.o: build_in.c
+	$(CC) -c $(CFLAGS) build_in.c
+
+filetype.o: filetype.c
+	$(CC) -c $(CFLAGS) filetype.c
+
+simpletest.o: simpletest.c
+	$(CC) -c $(CFLAGS) simpletest.c
+
+memlook.o: memlook.c
+	$(CC) -c $(CFLAGS) memlook.c
+
+$(OBJS): glimpse.h region.h
+

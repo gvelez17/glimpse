@@ -1,0 +1,24 @@
+#ifndef _PATHS_H_
+#define _PATHS_H_
+
+#ifndef CMD_PERL
+#define CMD_PERL	"@CMD_PERL@"
+#endif
+
+#ifndef CMD_GZIP
+#define CMD_GZIP	"@CMD_GZIP@"
+#endif
+
+#ifndef CMD_GUNZIP
+#define CMD_GUNZIP	"@CMD_GUNZIP@"
+#endif
+
+#ifndef CMD_UNZIP
+#define CMD_UNZIP	"@CMD_UNZIP@"
+#endif
+
+#ifndef CMD_UNCOMPRESS
+#define CMD_UNCOMPRESS	"@CMD_UNCOMPRESS@"
+#endif
+
+#endif

@@ -1,0 +1,83 @@
+#/* Copyright (c) 1994 Burra Gopal, Udi Manber.  All Rights Reserved. */
+# Makefile for the compress library -- agrep should be linked with it in case
+# it wants to search for patterns in a compressed file.
+
+# You might have to change these depending on your machine configuration.
+# AR and RANLIB are the library-archive programs. On Solaris, RANLIB is not
+# required (define it to true) and AR is in /usr/ccs/bin/ar (on our machine!).
+CC	      = cc
+AR	      = ar #/usr/ccs/bin/ar #for Solaris
+RANLIB	      = :
+
+SHELL = /bin/sh
+
+# Define HAVE_DIRENT_H to be 1 when you don't have <sys/dir.h> else define it to be 0 (in this case, one of the other 3 flags may need to be defined to be 1).
+HAVE_DIRENT_H = 0
+HAVE_SYS_DIR_H	= 1
+HAVE_SYS_NDIR_H	= 0
+HAVE_NDIR_H	= 0
+
+# Define UTIME to be 1 if you have the utime() routine on your system. Else define it to be 0.
+UTIME = 1
+
+# Define ISO_CHAR_SET to be 1 if you want to use the international 8bit character set. Else define it to be 0.
+ISO_CHAR_SET = 0
+
+# YOU DON'T HAVE TO CHANGE ANYTHING BELOW THIS LINE
+
+INDEXDIR = ../index
+AGREPDIR = ../agrep
+LIBDIR = ../lib
+BIN = ../bin
+TEMPLATEDIR   = ../libtemplate
+
+all: lib tbuild cast uncast test
+	cp tbuild $(BIN)/.
+	cp cast $(BIN)/.
+	cp uncast $(BIN)/.
+
+# Include flags is not a part of CLFAGS and LINKFLAGS since path names from subdirs can be different
+OPTIMIZEFLAGS	= -O
+#PROFILEFLAGS	= -p
+#DEBUGFLAGS	= -g -DBG_DEBUG=1 -DDEBUG=1
+INCLUDEFLAGS	= -I$(INDEXDIR) -I$(AGREPDIR) -I$(TEMPLATEDIR)/include
+DEFINEFLAGS	= -DSTRUCTURED_QUERIES=$(STRUCTURED_QUERIES) -DHAVE_DIRENT_H=$(HAVE_DIRENT_H) -DUTIME=$(UTIME) -DISO_CHAR_SET=$(ISO_CHAR_SET)
+SUBDIRCFLAGS	= -c $(DEFINEFLAGS) $(OPTIMIZEFLAGS) $(PROFILEFLAGS) $(DEBUGFLAGS)
+CFLAGS		= $(INCLUDEFLAGS) $(SUBDIRCFLAGS)
+SUBDIRLINKFLAGS	= $(PROFILEFLAGS)
+LINKFLAGS	= $(INCLUDES) $(SUBDIRLINKFLAGS)
+OTHERLIBS	=
+
+LIBOBJ = hash.o string.o misc.o quick.o cast.o uncast.o tsimpletest.o tmemlook.o tbuild.o
+LIB = $(LIBDIR)/libcast.a
+
+lib: $(LIBOBJ)
+	$(AR) rcv $(LIB) $(LIBOBJ)
+	$(RANLIB) $(LIB)
+
+test: hash.o string.o misc.o test.o quick.o tsimpletest.o tmemlook.o cast.o uncast.o
+	 $(CC) $(LINKFLAGS) -o test hash.o string.o misc.o test.o quick.o tsimpletest.o tmemlook.o cast.o uncast.o $(OTHERLIBS)
+
+tbuild: hash.o string.o misc.o tbuild.o main_tbuild.o defs.h
+	 $(CC) $(LINKFLAGS) -o tbuild hash.o string.o misc.o tbuild.o main_tbuild.o $(OTHERLIBS)
+
+cast: main_cast.o $(LIB)
+	 $(CC) $(LINKFLAGS) -o cast main_cast.o $(LIBOBJ) $(OTHERLIBS)
+
+uncast: main_uncast.o $(LIB)
+	$(CC) $(LINKFLAGS) -o uncast main_uncast.o $(LIBOBJ) $(OTHERLIBS)
+
+hash.o: defs.h $(INDEXDIR)/glimpse.h
+string.o: defs.h $(INDEXDIR)/glimpse.h
+misc.o: defs.h $(INDEXDIR)/glimpse.h
+quick.o: defs.h $(INDEXDIR)/glimpse.h
+cast.o: defs.h $(INDEXDIR)/glimpse.h
+uncast.o: defs.h $(INDEXDIR)/glimpse.h
+main_cast.o: defs.h $(INDEXDIR)/glimpse.h
+main_uncast.o: defs.h $(INDEXDIR)/glimpse.h
+tsimpletest.o: defs.h $(INDEXDIR)/glimpse.h
+tmemlook.o: defs.h $(INDEXDIR)/glimpse.h
+test.o : test.c
+
+clean:
+	rm -f *.o $(LIB) core test cast uncast tbuild a.out

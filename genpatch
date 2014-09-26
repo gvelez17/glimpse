@@ -1,0 +1,20 @@
+#!/bin/sh
+# $Id: genpatch,v 1.1 1999/11/03 20:36:24 golda Exp $
+
+PATH=/bin:/usr/bin:/usr/local/bin ; export PATH
+ROOT=${1-.}
+RLOGFLAGS="-L -R"
+
+tmpfile="/tmp/findco$$"
+
+for rcsdir in `find ${ROOT} -name RCS -type d -print` ; do
+  rlog ${RLOGFLAGS} ${rcsdir}/* > ${tmpfile}
+  if [ -s "${tmpfile}" ] ; then
+    echo "# Files in ${rcsdir}:"
+    for f in `cat ${tmpfile}` ; do
+       f2=`echo $f | sed -e 's@RCS/@@' -e 's@,v$@@'`
+       rcsdiff -c ${f2}
+    done
+  fi
+done
+rm -f ${tmpfile}

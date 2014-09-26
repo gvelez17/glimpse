@@ -1,0 +1,86 @@
+#
+#  Makefile for the SOIF template processing code
+#
+#  Darren Hardy, hardy@cs.colorado.edu, May 1994
+#
+#  $Id: Makefile.hp,v 1.1 1999/11/03 21:41:04 golda Exp $
+#
+prefix = /usr/local/harvest
+INSTALL_BINDIR	= $(prefix)/bin
+INSTALL_LIBDIR	= $(prefix)/lib
+INSTALL_MANDIR 	= $(prefix)/man
+
+SHELL		= /bin/sh
+CC		= cc
+INSTALL		= cp #install -c
+INSTALL_BIN 	= ${INSTALL}
+INSTALL_FILE 	= ${INSTALL} #-m 644
+RANLIB		= :
+XTRA_LIBS	=  -lresolv -lm
+LN_S		= ln -s
+
+DEBUG		= $(DEBUG_TOP) #-O #-g #-DDEBUG
+DEBUG_LIBS	=
+
+CFLAGS		= $(DEBUG) -I../include
+OBJS 		= template.o
+LIBDIR		= ../lib
+LDFLAGS		= -L$(LIBDIR)
+LIBS		= -ltemplate -lutil $(DEBUG_LIBS) $(XTRA_LIBS)
+LIBFILE		= libtemplate.a
+BINS		= cksoif print-template print-attr \
+		  lsm2soif iafa2soif pcindex2soif translate-urls
+
+all:	$(LIBFILE) install-lib #$(BINS) mktemplate
+
+$(LIBFILE):	$(OBJS)
+	ar r $@ $(OBJS)
+	$(RANLIB) $@
+
+clean:
+	-rm -f core $(OBJS) $(LIBFILE) $(BINS) *.o 
+
+#realclean:
+#	-rm -f Makefile mktemplate
+
+install:	install-lib
+	@for f in $(BINS) mktemplate; do \
+		echo $(INSTALL_BIN) $$f $(INSTALL_BINDIR); \
+		$(INSTALL_BIN) $$f $(INSTALL_BINDIR); \
+	done
+	-rm -f $(INSTALL_BINDIR)/LSM.unnest
+	$(LN_S) $(INSTALL_BINDIR)/lsm2soif $(INSTALL_BINDIR)/LSM.unnest
+
+install-lib:	$(LIBDIR)/$(LIBFILE)
+
+$(LIBDIR)/$(LIBFILE):	$(LIBFILE)
+	$(INSTALL_FILE) $(LIBFILE) $(LIBDIR)/$(LIBFILE)
+	$(RANLIB) $(LIBDIR)/$(LIBFILE)
+
+cksoif: cksoif.o 
+	$(CC) -o $@ $@.o $(LDFLAGS) $(LIBS)
+
+print-template: print-template.o 
+	$(CC) -o $@ $@.o $(LDFLAGS) $(LIBS)
+
+print-attr: print-attr.o 
+	$(CC) -o $@ $@.o $(LDFLAGS) $(LIBS)
+
+template2html: template2html.o 
+	$(CC) -o $@ $@.o $(LDFLAGS) $(LIBS)
+
+translate-urls: translate-urls.o 
+	$(CC) -o $@ $@.o $(LDFLAGS) $(LIBS)
+
+lsm2soif: lsm2soif.o 
+	$(CC) -o $@ $@.o $(LDFLAGS) -lurl $(LIBS) -lgdbm -lmd5 $(XTRA_LIBS)
+
+iafa2soif: iafa2soif.o 
+	$(CC) -o $@ $@.o $(LDFLAGS) -lurl $(LIBS) -lgdbm -lmd5 $(XTRA_LIBS)
+
+print-urlrefs: print-urlrefs.o 
+	$(CC) -o $@ $@.o $(LDFLAGS) -lurl $(LIBS) -lgdbm -lmd5 $(XTRA_LIBS)
+
+pcindex2soif: pcindex2soif.o 
+	$(CC) -o $@ $@.o $(LDFLAGS) -lurl $(LIBS) -lgdbm -lmd5 $(XTRA_LIBS)
+

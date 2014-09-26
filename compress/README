@@ -1,0 +1,20 @@
+/* Copyright (c) 1994 Burra Gopal, Udi Manber.  All Rights Reserved. */
+
+This directory contains the source code for the new text-compression
+algorithm. The source is divided as follows:
+
+1. main_comp.c, tcomp.c: source code for tcomp (compress algorithm).
+	This also uses simpletest.c and memlook.c from ../index.
+
+2. main_uncomp.c, tuncomp.c: source code for tuncomp (uncompress algorithm).
+
+3. read_in.c: generates build, the procedure which builds the dictionary
+	to be used by tuncomp and the hash_table used by tcomp. It uses
+	and interprets the output of the indexing-algorithm present
+	in ../index, the software is glimpseindex (a part of glimpse).
+
+4. hash.c: common routines used by tcomp and build.
+
+5. string.c: common routines used by tuncomp and build.
+
+6. misc.c, defs.h: common to all above.

@@ -1,0 +1,163 @@
+# Copyright (c) 1994 Sun Wu, Udi Manber, Burra Gopal.  All Rights Reserved.
+
+srcdir = @srcdir@
+VPATH  = @srcdir@
+SHELL  = /bin/sh
+CC     = @CC@
+LIBS   = @LIBS@
+CP     = @CP@
+STRIP  = @STRIP@
+INSTALL		= @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA	= @INSTALL_DATA@
+INSTALL_MAN	= ${INSTALL} -m 444
+DEFS		=
+DYNFILTER	= @DYNFILTER@
+
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+binprefix =
+manprefix =
+
+bindir = $(exec_prefix)/bin
+libdir = $(exec_prefix)/lib
+mandir = $(prefix)/man/man1
+manext = 1
+MANUAL = glimpse.1 glimpseindex.1 glimpseserver.1
+
+# YOU DON'T HAVE TO CHANGE ANYTHING BELOW THIS LINE
+ 
+# The binaries will be made in ./bin/. and the libraries are assumed to
+# be in ./lib . You normally don't have to change them.
+# NOTE: GLIMPSEDIR can be relative or absolute.
+GLIMPSEDIR	= ..
+BINDIR		= bin
+AGREPDIR        = agrep
+INDEXDIR        = index
+COMPRESSDIR	= compress
+TEMPLATEDIR     = libtemplate
+LIBDIR          = lib
+LIBTEMPLATEDIR  = $(TEMPLATEDIR)/lib
+SUBDIRS		= compress agrep libtemplate index $(DYNFILTER)
+LIBAGREP        = agrep
+LIBCOMPRESS     = cast
+LIBTEMPLATE     = template
+LIBUTIL         = util
+
+PROG		= glimpse
+PROGSERVER	= glimpseserver
+NOTSPROG	= nots$(PROG)
+NOTSPROGSERVER	= nots$(PROGSERVER)
+PROGINDEX	= index/glimpseindex
+PROGAGREP	= agrep/agrep
+OPTIMIZEFLAGS   = -O2
+INCLUDEFLAGS    = -I$(INDEXDIR) -I$(AGREPDIR) -I$(TEMPLATEDIR)/include
+CFLAGS          = $(INCLUDEFLAGS) $(DEFS)
+
+OBJS		= get_filename.o \
+		get_index.o \
+		split.o \
+		$(INDEXDIR)/region.o \
+		$(INDEXDIR)/getword.o \
+		$(INDEXDIR)/filetype.o \
+		$(INDEXDIR)/simpletest.o \
+		$(INDEXDIR)/memlook.o \
+		$(INDEXDIR)/lib.o\
+		$(INDEXDIR)/io.o
+
+HDRS		= $(INDEXDIR)/glimpse.h $(AGREPDIR)/agrep.h $(AGREPDIR)/checkfile.h $(AGREPDIR)/re.h $(INDEXDIR)/region.h
+
+SRC		= main.c \
+		get_filename.c \
+		get_index.c \
+		split.c \
+		$(INDEXDIR)/region.c \
+		$(INDEXDIR)/getword.c \
+		$(INDEXDIR)/filetype.c \
+		$(INDEXDIR)/simpletest.c \
+		$(INDEXDIR)/memlook.c \
+		$(INDEXDIR)/io.c
+
+all:	build-sub @TARGET@
+Sall:		$(PROG) $(PROGSERVER) $(PROGINDEX) 
+agrep:		$(PROGAGREP)
+NOTSall:	$(NOTSPROG) $(NOTSPROGSERVER)
+
+build-sub:
+	for d in $(SUBDIRS) ; do \
+		( cd $$d; $(MAKE) ); \
+	done
+
+# Check target
+
+check:	all
+	$(SHELL) test/check.sh
+
+# INSTALL on Solaris should be carried one at a time. :-(
+
+install: all installdirs install-man
+	for d in $(SUBDIRS) ; do \
+		( cd $$d; $(MAKE) $@ ); \
+	done
+	for d in $(BINDIR)/$(PROG) $(BINDIR)/$(PROGSERVER) ; do \
+		$(INSTALL) $$d $(bindir) ; \
+	done
+
+install-man:
+	for d in $(MANUAL) ; do \
+		$(INSTALL_MAN) $$d $(mandir) ; \
+	done
+
+installdirs:	mkinstalldirs
+	$(srcdir)/mkinstalldirs $(bindir) $(mandir)
+
+clean:
+	for d in $(SUBDIRS); do \
+		( cd $$d; $(MAKE) $@ ); \
+	done
+	rm -f main_server.o main_server.c main.o $(OBJS) core a.out $(PROG) $(PROGSERVER) config.log
+	rm -f $(LIBDIR)/lib$(LIBCOMPRESS).a $(LIBDIR)/lib$(LIBAGREP).a
+	rm -f $(BINDIR)/*
+
+distclean: clean
+	for d in $(SUBDIRS); do \
+		( cd $$d; $(MAKE) $@ ); \
+	done
+	rm -f Makefile config.cache config.status
+
+$(PROG):	main.o $(OBJS) $(SRC) $(HDRS) $(LIBDIR)/lib$(LIBAGREP).a $(LIBTEMPLATEDIR)/lib$(LIBTEMPLATE).a $(LIBTEMPLATEDIR)/lib$(LIBUTIL).a $(LIBDIR)/lib$(LIBCOMPRESS).a
+	$(CC) $(LDFLAGS) -L$(LIBDIR) -L$(LIBTEMPLATEDIR) -o $(BINDIR)/$(PROG) main.o $(OBJS) -l$(LIBAGREP) -l$(LIBTEMPLATE) -l$(LIBUTIL) $(LIBS)
+
+$(NOTSPROG):	main.o $(OBJS) $(SRC) $(HDRS) $(LIBDIR)/lib$(LIBAGREP).a $(LIBDIR)/lib$(LIBCOMPRESS).a
+	$(CC) $(LDFLAGS) -L$(LIBDIR) -o $(BINDIR)/$(PROG) main.o $(OBJS) -l$(LIBAGREP) $(LIBS)
+
+$(PROGINDEX):	$(PROGAGREP) $(LIBDIR)/lib$(LIBAGREP).a $(LIBTEMPLATEDIR)/lib$(LIBTEMPLATE).a $(LIBTEMPLATEDIR)/lib$(LIBUTIL).a $(LIBDIR)/lib$(LIBCOMPRESS).a
+	cd $(INDEXDIR) ; $(MAKE) -f Makefile.linux CC="$(CC)" SUBDIRCFLAGS="$(SUBDIRCFLAGS)" SUBDIRLINKFLAGS="$(SUBDIRLINKFLAGS)" SHELL="$(SHELL)" HAVE_DIRENT_H="$(HAVE_DIRENT_H)" HAVE_SYS_DIR_H="$(HAVE_SYS_DIR_H)" HAVE_SYS_NDIR_H="$(HAVE_SYS_NDIR_H)" HAVE_NDIR_H="$(HAVE_NDIR_H)" UTIME="$(UTIME)" STRUCTURED_QUERIES="$(STRUCTURED_QUERIES)" ISO_CHAR_SET="$(ISO_CHAR_SET)" SFS_COMPAT="$(SFS_COMPAT)"
+
+$(PROGAGREP):	$(LIBDIR)/lib$(LIBCOMPRESS).a
+	cd $(AGREPDIR) ; $(MAKE) -f Makefile.linux CC="$(CC)" SUBDIRCFLAGS="$(SUBDIRCFLAGS)" SUBDIRLINKFLAGS="$(SUBDIRLINKFLAGS)" SHELL="$(SHELL)" HAVE_DIRENT_H="$(HAVE_DIRENT_H)" HAVE_SYS_DIR_H="$(HAVE_SYS_DIR_H)" HAVE_SYS_NDIR_H="$(HAVE_SYS_NDIR_H)" HAVE_NDIR_H="$(HAVE_NDIR_H)" UTIME="$(UTIME)" STRUCTURED_QUERIES="$(STRUCTURED_QUERIES)" ISO_CHAR_SET="$(ISO_CHAR_SET)" SFS_COMPAT="$(SFS_COMPAT)"
+
+$(PROGSERVER):	main_server.o $(OBJS) $(SRC) $(HDRS) $(LIBDIR)/lib$(LIBAGREP).a $(LIBTEMPLATEDIR)/lib$(LIBTEMPLATE).a $(LIBTEMPLATEDIR)/lib$(LIBUTIL).a $(LIBDIR)/lib$(LIBCOMPRESS).a
+	$(CC) $(LDFLAGS) -L$(LIBDIR) -L$(LIBTEMPLATEDIR) -o $(BINDIR)/$(PROGSERVER) main_server.o $(OBJS) -l$(LIBAGREP) -l$(LIBTEMPLATE) -l$(LIBUTIL) $(LIBS)
+
+
+ 
+$(NOTSPROGSERVER):	main_server.o $(OBJS) $(SRC) $(HDRS) $(LIBDIR)/lib$(LIBAGREP).a $(LIBDIR)/lib$(LIBCOMPRESS).a
+	$(CC) $(LDFLAGS) -L$(LIBDIR) -o $(BINDIR)/$(PROGSERVER) main_server.o $(OBJS) -l$(LIBAGREP) $(LIBS)
+
+main_server.o: main.c defs.h $(AGREPDIR)/agrep.h $(AGREPDIR)/checkfile.h $(INDEXDIR)/glimpse.h
+	cp main.c main_server.c
+	$(CC) -c $(CFLAGS) -DISSERVER=1 -o $@ main_server.c
+
+main.o:	main.c defs.h $(AGREPDIR)/agrep.h $(AGREPDIR)/checkfile.h $(INDEXDIR)/glimpse.h
+	$(CC) -c $(CFLAGS) -DISSERVER=0 -o $@ main.c
+
+get_filename.o:	get_filename.c $(AGREPDIR)/agrep.h $(AGREPDIR)/checkfile.h $(INDEXDIR)/glimpse.h
+	$(CC) -c $(CFLAGS) -o $@ get_filename.c
+
+get_index.o: get_index.c $(AGREPDIR)/agrep.h $(AGREPDIR)/checkfile.h $(INDEXDIR)/glimpse.h
+	$(CC) -c $(CFLAGS) -o $@ get_index.c
+
+split.o: split.c $(AGREPDIR)/agrep.h $(AGREPDIR)/checkfile.h $(INDEXDIR)/glimpse.h
+	$(CC) -c $(CFLAGS) -o $@ split.c
+

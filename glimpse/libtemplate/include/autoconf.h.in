@@ -1,0 +1,257 @@
+/*
+** libtemplate/include/autoconf.h.in.
+*/
+
+/* -------------------------------------------------
+  SYSUH - begin update
+
+  There are too many compiler DEFS.  This will be a problem on some
+  systems because the length limit of the comand line.
+  Therefore, I moved the compiler DEFS here so that the make output
+  is more readable.
+
+  The following definitions will be automatically updated by configure.
+  ----------------------------------------------------------------------*/
+
+#ifndef	_AUTOCONF_H_
+#define	_AUTOCONF_H_
+
+#define	HAVE_DIRENT_H		0
+#define HAVE_FCNTL_H		0
+#define HAVE_SYS_FILE_H		0
+#define HAVE_SYS_TIME_H		0
+#define HAVE_UNISTD_H		0
+#define HAVE_SYS_SELECT_H	0
+#define HAVE_SYS_DIR_H		0
+#define	TIME_WITH_SYS_TIME	0
+#define HAVE_UTIME_NULL		0
+#define HAVE_STRDUP		0
+#define HAVE_STRERROR		0
+#define HAVE_LIBM		0
+#define STRUCTURED_QUERIES	0
+#define ISO_CHAR_SET		0
+#define SFS_COMPAT		0
+#define AGREP_POINTER		0
+
+#define FILE_END_MARK		@FILE_END_MARK@
+
+#define	RETSIGTYPE	@RETSIGTYPE@
+
+/* -----------------------------------------
+  SYSUH - end update.
+  ---------------------------------------------------- */
+
+/* Define if on AIX 3.
+   System headers sometimes define this.
+   We just want to avoid a redefinition error message.  */
+#ifndef _ALL_SOURCE
+#undef _ALL_SOURCE
+#endif
+
+/* Define if using alloca.c.  */
+#undef C_ALLOCA
+
+/* Define to empty if the keyword does not work.  */
+#undef const
+
+/* Define to one of _getb67, GETB67, getb67 for Cray-2 and Cray-YMP systems.
+   This function is required for alloca.c support on those systems.  */
+#undef CRAY_STACKSEG_END
+
+/* Define to the type of elements in the array set by `getgroups'.
+   Usually this is either `int' or `gid_t'.  */
+#undef GETGROUPS_T
+
+/* Define to `int' if <sys/types.h> doesn't define.  */
+#undef gid_t
+
+/* Define if you have alloca.h and it should be used (not Ultrix).  */
+#undef HAVE_ALLOCA_H
+
+/* Define if you support file names longer than 14 characters.  */
+#undef HAVE_LONG_FILE_NAMES
+
+/* Define if your struct stat has st_blksize.  */
+#undef HAVE_ST_BLKSIZE
+
+/* Define if on MINIX.  */
+#undef _MINIX
+
+/* Define if you don't have dirent.h, but have ndir.h.  */
+#undef NDIR
+
+/* Define to `long' if <sys/types.h> doesn't define.  */
+#undef off_t
+
+/* Define if the system does not provide POSIX.1 features except
+   with this defined.  */
+#undef _POSIX_1_SOURCE
+
+/* Define if you need to in order for stat and other things to work.  */
+#undef _POSIX_SOURCE
+
+/* Define as the return type of signal handlers (int or void).  */
+#undef RETSIGTYPE
+
+/* Define if the setvbuf function takes the buffering type as its second
+   argument and the buffer pointer as the third, as on System V
+   before release 3.  */
+#undef SETVBUF_REVERSED
+
+/* If using the C implementation of alloca, define if you know the
+   direction of stack growth for your system; otherwise it will be
+   automatically deduced at run-time.
+	STACK_DIRECTION > 0 => grows toward higher addresses
+	STACK_DIRECTION < 0 => gro
+ws toward lower addresses
+	STACK_DIRECTION = 0 => direction of growth unknown
+ */
+#undef STACK_DIRECTION
+
+/* Define if the `S_IS*' macros in <sys/stat.h> do not work properly.  */
+#undef STAT_MACROS_BROKEN
+
+/* Define if you have the ANSI C header files.  */
+#undef STDC_HEADERS
+
+/* Define if you don't have dirent.h, but have sys/dir.h.  */
+#undef SYSDIR
+
+/* Define if you don't have dirent.h, but have sys/ndir.h.  */
+#undef SYSNDIR
+
+/* Define to `int' if <sys/types.h> doesn't define.  */
+#undef uid_t
+
+/* Define if the closedir function returns void instead of int.  */
+#undef VOID_CLOSEDIR
+
+/* Define if your processor stores words with the most significant
+   byte first (like Motorola and SPARC, unlike Intel and VAX).  */
+#undef WORDS_BIGENDIAN
+
+/* The number of bytes in a int.  */
+#undef SIZEOF_INT
+
+/* The number of bytes in a long.  */
+#undef SIZEOF_LONG
+
+/* Define if you have bcopy.  */
+#undef HAVE_BCOPY
+
+/* Define if you have bzero.  */
+#undef HAVE_BZERO
+
+/* Define if you have flock.  */
+#undef HAVE_FLOCK
+
+/* Define if you have fsync.  */
+#undef HAVE_FSYNC
+
+/* Define if you have ftruncate.  */
+#undef HAVE_FTRUNCATE
+
+/* Define if you have getcwd.  */
+#undef HAVE_GETCWD
+
+/* Define if you have getdtablesize.  */
+#undef HAVE_GETDTABLESIZE
+
+/* Define if you have lrand48.  */
+#undef HAVE_LRAND48
+
+/* Define if you have memmove.  */
+#undef HAVE_MEMMOVE
+
+/* Define if you have mktime.  */
+#undef HAVE_MKTIME
+
+/* Define if you have nice.  */
+#undef HAVE_NICE
+
+/* Define if you have on_exit.  */
+#undef HAVE_ON_EXIT
+
+/* Define if you have random.  */
+#undef HAVE_RANDOM
+
+/* Define if you have rename.  */
+#undef HAVE_RENAME
+
+/* Define if you have setlinebuf.  */
+#undef HAVE_SETLINEBUF
+
+/* Define if you have setrlimit.  */
+#undef HAVE_SETRLIMIT
+
+/* Define if you have srand48.  */
+#undef HAVE_SRAND48
+
+/* Define if you have srandom.  */
+#undef HAVE_SRANDOM
+
+/* Define if you have sysconf.  */
+#undef HAVE_SYSCONF
+
+/* Define if you have timegm.  */
+#undef HAVE_TIMEGM
+
+/* Define if you have usleep.  */
+#undef HAVE_USLEEP
+
+/* Define if you have vfork.  */
+#undef HAVE_VFORK
+
+/* Define if you have the <arpa/inet.h> header file.  */
+#undef HAVE_ARPA_INET_H
+
+/* Define if you have the <config.h> header file.  */
+#undef HAVE_CONFIG_H
+
+/* Define if you have the <memory.h> header file.  */
+#undef HAVE_MEMORY_H
+
+/* Define if you have the <netinet/in.h> header file.  */
+#undef HAVE_NETINET_IN_H
+
+/* Define if you have the <stdlib.h> header file.  */
+#undef HAVE_STDLIB_H
+
+/* Define if you have the <string.h> header file.  */
+#undef HAVE_STRING_H
+
+/* Define if you have the <sys/syslog.h> header file.  */
+#undef HAVE_SYS_SYSLOG_H
+
+/* Define if you have the <sys/types.h> header file.  */
+#undef HAVE_SYS_TYPES_H
+
+/* Define if you have the <syslog.h> header file.  */
+#undef HAVE_SYSLOG_H
+
+/* Define if you have the dbm library (-ldbm).  */
+#undef HAVE_LIBDBM
+
+/* Define if you have the fl library (-lfl).  */
+#undef HAVE_LIBFL
+
+/* Define if you have the malloc library (-lmalloc).  */
+#undef HAVE_LIBMALLOC
+
+/* Define if you have the ndbm library (-lndbm).  */
+#undef HAVE_LIBNDBM
+
+/* Define if you have the nsl library (-lnsl).  */
+#undef HAVE_LIBNSL
+
+/* Define if you have the resolv library (-lresolv).  */
+#undef HAVE_LIBRESOLV
+
+/* Define if you have the seq library (-lseq).  */
+#undef HAVE_LIBSEQ
+
+/* Define if you have the socket library (-lsocket).  */
+#undef HAVE_LIBSOCKET
+
+#endif	/* _AUTOCONF_H_ */
+

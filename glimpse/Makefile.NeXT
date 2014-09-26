@@ -1,0 +1,178 @@
+# Copyright (c) 1994 Sun Wu, Udi Manber, Burra Gopal.  All Rights Reserved.
+
+# To compile for structured queries, make "all: Sall" and "STRUCTURED_QUERIES=1".
+#STRUCTURED_QUERIES = 0
+STRUCTURED_QUERIES = 1
+
+#all:		NOTSall
+all:		Sall
+
+# Define HAVE_DIRENT_H to be 1 when you don't have <sys/dir.h> else define it to be 0 (in this case, one of the other 3 flags may need to be defined to be 1).
+HAVE_DIRENT_H	= 0
+HAVE_SYS_DIR_H	= 0
+HAVE_SYS_NDIR_H	= 0
+HAVE_NDIR_H	= 0
+
+# Define UTIME to be 1 if you have the utime() routine on your system. Else define it to be 0.
+UTIME = 1
+
+# Define ISO_CHAR_SET to be 1 if you want to use the international 8bit character set. Else define it to be 0.
+ISO_CHAR_SET = 0
+
+# You might have to change this depending on your machine configuration.
+CC = gcc
+
+SHELL = /bin/sh
+
+# For compatibility with SFS, define this flag (internal only)
+SFS_COMPAT      = 0
+
+# YOU DON'T HAVE TO CHANGE ANYTHING BELOW THIS LINE
+
+# The binaries will be made in ./bin/. and the libraries are assumed to
+# be in ./lib . You normally don't have to change them.
+# NOTE: GLIMPSEDIR can be relative or absolute.
+GLIMPSEDIR	= ..
+BINDIR		= bin
+AGREPDIR	= agrep
+INDEXDIR	= index
+COMPRESSDIR	= compress
+TEMPLATEDIR	= libtemplate
+LIBDIR		= lib
+LIBTEMPLATEDIR	= $(TEMPLATEDIR)/lib
+LIBAGREP	= agrep
+LIBCOMPRESS	= cast
+LIBTEMPLATE	= template
+LIBUTIL		= util
+OTHERLIBS	=
+
+PROG		= glimpse
+PROGSERVER	= glimpseserver
+NOTSPROG	= nots$(PROG)
+NOTSPROGSERVER	= nots$(PROGSERVER)
+PROGINDEX	= index/glimpseindex
+PROGAGREP	= agrep/agrep
+
+# Include flags is not a part of CLFAGS and LINKFLAGS since path names from subdirs can be different
+OPTIMIZEFLAGS	= -O
+#PROFILEFLAGS	= -p
+#DEBUGFLAGS	= -g -DBG_DEBUG=1 -DDEBUG=1
+INCLUDEFLAGS	= -I$(INDEXDIR) -I$(AGREPDIR) -I$(TEMPLATEDIR)/include 
+DEFINEFLAGS	= -DSTRUCTURED_QUERIES=$(STRUCTURED_QUERIES) -DHAVE_DIRENT_H=$(HAVE_DIRENT_H) -DHAVE_SYS_DIR_H=$(HAVE_SYS_DIR_H) \
+		  -DHAVE_SYS_NDIR_H=$(HAVE_SYS_NDIR_H) -DHAVE_NDIR_H=$(HAVE_NDIR_H) -DUTIME=$(UTIME) -DISO_CHAR_SET=$(ISO_CHAR_SET) -DSFS_COMPAT=$(SFS_COMPAT)
+SUBDIRCFLAGS	= -c $(DEFINEFLAGS) $(OPTIMIZEFLAGS) $(PROFILEFLAGS) $(DEBUGFLAGS)
+CFLAGS		= $(INCLUDEFLAGS) $(SUBDIRCFLAGS)
+SUBDIRLINKFLAGS	= $(PROFILEFLAGS)
+LINKFLAGS	= $(INCLUDES) $(SUBDIRLINKFLAGS)
+
+OBJS		= get_filename.o \
+		get_index.o \
+		split.o \
+		$(INDEXDIR)/region.o \
+		$(INDEXDIR)/getword.o \
+		$(INDEXDIR)/filetype.o \
+		$(INDEXDIR)/simpletest.o \
+		$(INDEXDIR)/memlook.o \
+		$(INDEXDIR)/lib.o\
+		$(INDEXDIR)/io.o
+
+HDRS		= $(INDEXDIR)/glimpse.h $(AGREPDIR)/agrep.h $(AGREPDIR)/checkfile.h $(AGREPDIR)/re.h $(INDEXDIR)/region.h
+
+SRC		= main.c \
+		get_filename.c \
+		get_index.c \
+		split.c \
+		$(INDEXDIR)/region.c \
+		$(INDEXDIR)/getword.c \
+		$(INDEXDIR)/filetype.c \
+		$(INDEXDIR)/simpletest.c \
+		$(INDEXDIR)/memlook.c \
+		$(INDEXDIR)/io.c
+
+Sall:		$(PROGINDEX) $(PROGAGREP) $(PROG) $(PROGSERVER)
+
+NOTSall:	$(PROGINDEX) $(PROGAGREP) $(NOTSPROG) $(NOTSPROGSERVER)
+
+$(PROGINDEX):	$(PROGAGREP) $(LIBDIR)/lib$(LIBAGREP).a $(LIBTEMPLATEDIR)/lib$(LIBTEMPLATE).a $(LIBTEMPLATEDIR)/lib$(LIBUTIL).a $(LIBDIR)/lib$(LIBCOMPRESS).a
+	cd $(INDEXDIR) ; $(MAKE) -f Makefile.NeXT CC="$(CC)" SUBDIRCFLAGS="$(SUBDIRCFLAGS)" SUBDIRLINKFLAGS="$(SUBDIRLINKFLAGS)" SHELL="$(SHELL)" HAVE_DIRENT_H="$(HAVE_DIRENT_H)" HAVE_SYS_DIR_H="$(HAVE_SYS_DIR_H)" HAVE_SYS_NDIR_H="$(HAVE_SYS_NDIR_H)" HAVE_NDIR_H="$(HAVE_NDIR_H)" UTIME="$(UTIME)" STRUCTURED_QUERIES="$(STRUCTURED_QUERIES)" ISO_CHAR_SET="$(ISO_CHAR_SET)" SFS_COMPAT="$(SFS_COMPAT)"
+
+$(PROGAGREP):	$(LIBDIR)/lib$(LIBCOMPRESS).a
+	cd $(AGREPDIR) ; $(MAKE) -f Makefile.NeXT CC="$(CC)" SUBDIRCFLAGS="$(SUBDIRCFLAGS)" SUBDIRLINKFLAGS="$(SUBDIRLINKFLAGS)" SHELL="$(SHELL)" HAVE_DIRENT_H="$(HAVE_DIRENT_H)" HAVE_SYS_DIR_H="$(HAVE_SYS_DIR_H)" HAVE_SYS_NDIR_H="$(HAVE_SYS_NDIR_H)" HAVE_NDIR_H="$(HAVE_NDIR_H)" UTIME="$(UTIME)" STRUCTURED_QUERIES="$(STRUCTURED_QUERIES)" ISO_CHAR_SET="$(ISO_CHAR_SET)" SFS_COMPAT="$(SFS_COMPAT)"
+
+$(LIBDIR)/lib$(LIBCOMPRESS).a: $(HDRS)
+	cd $(COMPRESSDIR); $(MAKE) -f Makefile.NeXT CC="$(CC)" SUBDIRCFLAGS="$(SUBDIRCFLAGS)" SUBDIRLINKFLAGS="$(SUBDIRLINKFLAGS)" SHELL="$(SHELL)" HAVE_DIRENT_H="$(HAVE_DIRENT_H)" HAVE_SYS_DIR_H="$(HAVE_SYS_DIR_H)" HAVE_SYS_NDIR_H="$(HAVE_SYS_NDIR_H)" HAVE_NDIR_H="$(HAVE_NDIR_H)" UTIME="$(UTIME)" STRUCTURED_QUERIES="$(STRUCTURED_QUERIES)" ISO_CHAR_SET="$(ISO_CHAR_SET)" SFS_COMPAT="$(SFS_COMPAT)"
+
+$(PROG):	main.o $(OBJS) $(SRC) $(HDRS) $(LIBDIR)/lib$(LIBAGREP).a $(LIBTEMPLATEDIR)/lib$(LIBTEMPLATE).a $(LIBTEMPLATEDIR)/lib$(LIBUTIL).a $(LIBDIR)/lib$(LIBCOMPRESS).a
+	 $(CC) $(LINKFLAGS) -L$(LIBDIR) -L$(LIBTEMPLATEDIR) -o $(PROG) main.o $(OBJS) -l$(LIBAGREP) -l$(LIBTEMPLATE) -l$(LIBUTIL) $(OTHERLIBS)
+	cp $(PROG) $(BINDIR)
+
+$(NOTSPROG):	main.o $(OBJS) $(SRC) $(HDRS) $(LIBDIR)/lib$(LIBAGREP).a $(LIBDIR)/lib$(LIBCOMPRESS).a
+	$(CC) $(LINKFLAGS) -L$(LIBDIR) -o $(PROG) main.o $(OBJS) -l$(LIBAGREP) $(OTHERLIBS)
+	cp $(PROG) $(BINDIR)
+
+$(PROGSERVER):	main_server.o $(OBJS) $(SRC) $(HDRS) $(LIBDIR)/lib$(LIBAGREP).a $(LIBTEMPLATEDIR)/lib$(LIBTEMPLATE).a $(LIBTEMPLATEDIR)/lib$(LIBUTIL).a $(LIBDIR)/lib$(LIBCOMPRESS).a
+	 $(CC) $(LINKFLAGS) -L$(LIBDIR) -L$(LIBTEMPLATEDIR) -o $(PROGSERVER) main_server.o $(OBJS) -l$(LIBAGREP) -l$(LIBTEMPLATE) -l$(LIBUTIL) $(OTHERLIBS)
+	cp $(PROGSERVER) $(BINDIR)
+
+$(NOTSPROGSERVER):	main_server.o $(OBJS) $(SRC) $(HDRS) $(LIBDIR)/lib$(LIBAGREP).a $(LIBDIR)/lib$(LIBCOMPRESS).a
+	$(CC) $(LINKFLAGS) -L$(LIBDIR) -o $(PROGSERVER) main_server.o $(OBJS) -l$(LIBAGREP) $(OTHERLIBS)
+	cp $(PROGSERVER) $(BINDIR)
+
+$(LIBTEMPLATEDIR)/lib$(LIBTEMPLATE).a:
+	cd $(TEMPLATEDIR) ; $(MAKE) -f Makefile.NeXT CC="$(CC)" SUBDIRCFLAGS="$(SUBDIRCFLAGS)" SUBDIRLINKFLAGS="$(SUBDIRLINKFLAGS)" SHELL="$(SHELL)" HAVE_DIRENT_H="$(HAVE_DIRENT_H)" HAVE_SYS_DIR_H="$(HAVE_SYS_DIR_H)" HAVE_SYS_NDIR_H="$(HAVE_SYS_NDIR_H)" HAVE_NDIR_H="$(HAVE_NDIR_H)" UTIME="$(UTIME)" STRUCTURED_QUERIES="$(STRUCTURED_QUERIES)" ISO_CHAR_SET="$(ISO_CHAR_SET)" SFS_COMPAT="$(SFS_COMPAT)"
+
+$(LIBTEMPLATEDIR)/lib$(LIBUTIL).a:
+	cd $(TEMPLATEDIR) ; $(MAKE) -f Makefile.NeXT CC="$(CC)" SUBDIRCFLAGS="$(SUBDIRCFLAGS)" SUBDIRLINKFLAGS="$(SUBDIRLINKFLAGS)" SHELL="$(SHELL)" HAVE_DIRENT_H="$(HAVE_DIRENT_H)" HAVE_SYS_DIR_H="$(HAVE_SYS_DIR_H)" HAVE_SYS_NDIR_H="$(HAVE_SYS_NDIR_H)" HAVE_NDIR_H="$(HAVE_NDIR_H)" UTIME="$(UTIME)" STRUCTURED_QUERIES="$(STRUCTURED_QUERIES)" ISO_CHAR_SET="$(ISO_CHAR_SET)" SFS_COMPAT="$(SFS_COMPAT)"
+
+$(LIBDIR)/lib$(LIBAGREP).a:
+	cd $(AGREPDIR); $(MAKE) -f Makefile.NeXT CC="$(CC)" SUBDIRCFLAGS="$(SUBDIRCFLAGS)" SUBDIRLINKFLAGS="$(SUBDIRLINKFLAGS)" SHELL="$(SHELL)" HAVE_DIRENT_H="$(HAVE_DIRENT_H)" HAVE_SYS_DIR_H="$(HAVE_SYS_DIR_H)" HAVE_SYS_NDIR_H="$(HAVE_SYS_NDIR_H)" HAVE_NDIR_H="$(HAVE_NDIR_H)" UTIME="$(UTIME)" STRUCTURED_QUERIES="$(STRUCTURED_QUERIES)" ISO_CHAR_SET="$(ISO_CHAR_SET)" SFS_COMPAT="$(SFS_COMPAT)"
+
+# Check target
+
+check:	all
+	$(SHELL) test/check.sh
+
+clean:
+	-rm -f main_server.o main_server.c main.o $(OBJS) core a.out $(LIBDIR)/lib$(LIBAGREP).a $(PROG) $(PROGSERVER)
+	cd $(AGREPDIR); $(MAKE) clean
+	cd $(INDEXDIR) ; $(MAKE) clean
+	cd $(COMPRESSDIR); $(MAKE) clean
+	cd $(TEMPLATEDIR); $(MAKE) clean
+
+main_server.o: main.c defs.h $(AGREPDIR)/agrep.h $(AGREPDIR)/checkfile.h $(INDEXDIR)/glimpse.h
+	cp main.c main_server.c
+	$(CC) $(CFLAGS) -DISSERVER=1 -o $@ main_server.c
+
+main.o:	main.c defs.h $(AGREPDIR)/agrep.h $(AGREPDIR)/checkfile.h $(INDEXDIR)/glimpse.h
+	$(CC) $(CFLAGS) -DISSERVER=0 -o $@ main.c
+
+get_filename.o:	get_filename.c $(AGREPDIR)/agrep.h $(AGREPDIR)/checkfile.h $(INDEXDIR)/glimpse.h
+	$(CC) $(CFLAGS) -o $@ get_filename.c
+
+get_index.o: get_index.c $(AGREPDIR)/agrep.h $(AGREPDIR)/checkfile.h $(INDEXDIR)/glimpse.h
+	$(CC) $(CFLAGS) -o $@ get_index.c
+
+split.o: split.c $(AGREPDIR)/agrep.h $(AGREPDIR)/checkfile.h $(INDEXDIR)/glimpse.h
+	$(CC) $(CFLAGS) -o $@ split.c
+
+$(INDEXDIR)/lib.o:	$(INDEXDIR)/lib.c $(INDEXDIR)/glimpse.h
+	$(CC) $(CFLAGS) -o $@ $(INDEXDIR)/lib.c
+
+$(INDEXDIR)/io.o:	$(INDEXDIR)/io.c $(INDEXDIR)/glimpse.h
+	$(CC) $(CFLAGS) -o $@ $(INDEXDIR)/io.c
+
+$(INDEXDIR)/region.o: $(INDEXDIR)/region.c $(INDEXDIR)/glimpse.h $(INDEXDIR)/region.h
+	$(CC) $(CFLAGS) -o $@ $(INDEXDIR)/region.c
+
+$(INDEXDIR)/getword.o: $(INDEXDIR)/getword.c $(INDEXDIR)/glimpse.h
+	$(CC) $(CFLAGS) -o $@ $(INDEXDIR)/getword.c
+
+$(INDEXDIR)/filetype.o: $(INDEXDIR)/filetype.c $(INDEXDIR)/glimpse.h
+	$(CC) $(CFLAGS) -o $@ $(INDEXDIR)/filetype.c
+
+$(INDEXDIR)/simpletest.o: $(INDEXDIR)/simpletest.c $(INDEXDIR)/glimpse.h
+	$(CC) $(CFLAGS) -o $@ $(INDEXDIR)/simpletest.c
+
+$(INDEXDIR)/memlook.o: $(INDEXDIR)/memlook.c $(INDEXDIR)/glimpse.h
+	$(CC) $(CFLAGS) -o $@ $(INDEXDIR)/memlook.c
+

@@ -1,0 +1,102 @@
+#
+#  Makefile for the common source directory
+#
+#  $Id: Makefile.sgi,v 1.1 1999/11/03 20:41:18 golda Exp $
+#
+SUBDIRS		= util template #md5 util url template
+DEBUG_TOP	= #-O #-g #-DDEBUG
+
+prefix = /usr/local/harvest
+INSTALL_BINDIR	= $(prefix)/bin
+INSTALL_LIBDIR	= $(prefix)/lib
+INSTALL_MANDIR 	= $(prefix)/man
+
+SHELL		= /bin/sh
+CC		= cc
+INSTALL		= cp #install -c
+INSTALL_BIN 	= ${INSTALL}
+INSTALL_FILE 	= ${INSTALL} #-m 644
+RANLIB		= true
+LN_S		= ln -s
+XTRA_LIBS	=  -lresolv -lm
+XTRA_LIBS	= -lm
+
+
+# old variables for backward compatability
+INSTALLDIR 	= $(INSTALL_BINDIR)
+INSTALL_SCRIPT 	= $(INSTALL_BIN)
+
+INSTALL_DIRS	= $(prefix) $(INSTALL_BINDIR) $(INSTALL_LIBDIR) \
+		  $(INSTALL_MANDIR)
+
+all:	#all-gdbm
+	@for dir in $(SUBDIRS); do \
+		echo Making $@ in $$dir; \
+		(cd $$dir; $(MAKE) $(MFLAGS) CC="$(CC)" SUBDIRCFLAGS="$(SUBDIRCFLAGS)" SUBDIRLINKFLAGS="$(SUBDIRLINKFLAGS)" SHELL="$(SHELL)" HAVE_DIRENT_H="$(HAVE_DIRENT_H)" HAVE_SYS_DIR_H="$(HAVE_SYS_DIR_H)" HAVE_SYS_NDIR_H="$(HAVE_SYS_NDIR_H)" HAVE_NDIR_H="$(HAVE_NDIR_H)" UTIME="$(UTIME)" STRUCTURED_QUERIES="$(STRUCTURED_QUERIES)" ISO_CHAR_SET="$(ISO_CHAR_SET)" SFS_COMPAT="$(SFS_COMPAT)"\
+			INSTALL_BINDIR="$(INSTALL_BINDIR)" \
+			INSTALL_LIBDIR="$(INSTALL_LIBDIR)" \
+			INSTALL_MANDIR="$(INSTALL_MANDIR)" \
+			RANLIB="$(RANLIB)" \
+			DEBUG_TOP="$(DEBUG_TOP)" \
+			INSTALL_BIN="$(INSTALL_BIN)" \
+			INSTALL_FILE="$(INSTALL_FILE)" \
+			INSTALLDIR="$(INSTALL_BINDIR)" \
+			INSTALL_SCRIPT="$(INSTALL_SCRIPT)" -f Makefile.sgi $@); \
+	done
+
+install:
+	@for dir in $(SUBDIRS); do \
+		echo Making $@ in $$dir; \
+		(cd $$dir; $(MAKE) $(MFLAGS) CC="$(CC)" SUBDIRCFLAGS="$(SUBDIRCFLAGS)" SUBDIRLINKFLAGS="$(SUBDIRLINKFLAGS)" SHELL="$(SHELL)" HAVE_DIRENT_H="$(HAVE_DIRENT_H)" HAVE_SYS_DIR_H="$(HAVE_SYS_DIR_H)" HAVE_SYS_NDIR_H="$(HAVE_SYS_NDIR_H)" HAVE_NDIR_H="$(HAVE_NDIR_H)" UTIME="$(UTIME)" STRUCTURED_QUERIES="$(STRUCTURED_QUERIES)" ISO_CHAR_SET="$(ISO_CHAR_SET)" SFS_COMPAT="$(SFS_COMPAT)"\
+			INSTALL_BINDIR="$(INSTALL_BINDIR)" \
+			INSTALL_LIBDIR="$(INSTALL_LIBDIR)" \
+			INSTALL_MANDIR="$(INSTALL_MANDIR)" \
+			RANLIB="$(RANLIB)" \
+			INSTALL_BIN="$(INSTALL_BIN)" \
+			INSTALL_FILE="$(INSTALL_FILE)" \
+			INSTALLDIR="$(INSTALL_BINDIR)" \
+			INSTALL_SCRIPT="$(INSTALL_SCRIPT)" -f Makefile.sgi $@); \
+	done
+
+clean:
+	-@for dir in lib $(SUBDIRS); do \
+		echo Making $@ in $$dir; \
+		(cd $$dir; $(MAKE) $(MFLAGS) CC="$(CC)" SUBDIRCFLAGS="$(SUBDIRCFLAGS)" SUBDIRLINKFLAGS="$(SUBDIRLINKFLAGS)" SHELL="$(SHELL)" HAVE_DIRENT_H="$(HAVE_DIRENT_H)" HAVE_SYS_DIR_H="$(HAVE_SYS_DIR_H)" HAVE_SYS_NDIR_H="$(HAVE_SYS_NDIR_H)" HAVE_NDIR_H="$(HAVE_NDIR_H)" UTIME="$(UTIME)" STRUCTURED_QUERIES="$(STRUCTURED_QUERIES)" ISO_CHAR_SET="$(ISO_CHAR_SET)" SFS_COMPAT="$(SFS_COMPAT)"\
+			INSTALL_BINDIR="$(INSTALL_BINDIR)" \
+			INSTALL_LIBDIR="$(INSTALL_LIBDIR)" \
+			INSTALL_MANDIR="$(INSTALL_MANDIR)" \
+			RANLIB="$(RANLIB)" \
+			INSTALL_BIN="$(INSTALL_BIN)" \
+			INSTALL_FILE="$(INSTALL_FILE)" \
+			INSTALLDIR="$(INSTALL_BINDIR)" \
+			INSTALL_SCRIPT="$(INSTALL_SCRIPT)" $@); \
+	done
+
+#realclean:	clean
+#	-rm -f Makefile include/autoconf.h include/paths.h config.status *~ core
+#	-@for dir in gdbm lib $(SUBDIRS); do \
+#		echo Making $@ in $$dir; \
+#		(cd $$dir; $(MAKE) $(MFLAGS) CC="$(CC)" SUBDIRCFLAGS="$(SUBDIRCFLAGS)" SUBDIRLINKFLAGS="$(SUBDIRLINKFLAGS)" SHELL="$(SHELL)" HAVE_DIRENT_H="$(HAVE_DIRENT_H)" HAVE_SYS_DIR_H="$(HAVE_SYS_DIR_H)" HAVE_SYS_NDIR_H="$(HAVE_SYS_NDIR_H)" HAVE_NDIR_H="$(HAVE_NDIR_H)" UTIME="$(UTIME)" STRUCTURED_QUERIES="$(STRUCTURED_QUERIES)" ISO_CHAR_SET="$(ISO_CHAR_SET)" SFS_COMPAT="$(SFS_COMPAT)"\
+#			INSTALL_BINDIR="$(INSTALL_BINDIR)" \
+#			INSTALL_LIBDIR="$(INSTALL_LIBDIR)" \
+#			INSTALL_MANDIR="$(INSTALL_MANDIR)" \
+#			RANLIB="$(RANLIB)" \
+#			INSTALL_BIN="$(INSTALL_BIN)" \
+#			INSTALL_FILE="$(INSTALL_FILE)" \
+#			INSTALLDIR="$(INSTALL_BINDIR)" \
+#			INSTALL_SCRIPT="$(INSTALL_SCRIPT)" $@); \
+#	done
+
+#
+#  Compiles and installs gdbm from scratch.  Works with gdbm-1.7.3
+#
+all-gdbm:
+	@echo Making all in gdbm
+	@rm -f gdbm/autoconf.h
+	@$(LN_S) ../include/autoconf.h gdbm/autoconf.h
+	@(cd gdbm; \
+		$(MAKE) $(MFLAGS) -f Makefile.sgi CC="$(CC)" SUBDIRCFLAGS="$(SUBDIRCFLAGS)" SUBDIRLINKFLAGS="$(SUBDIRLINKFLAGS)" SHELL="$(SHELL)" HAVE_DIRENT_H="$(HAVE_DIRENT_H)" HAVE_SYS_DIR_H="$(HAVE_SYS_DIR_H)" HAVE_SYS_NDIR_H="$(HAVE_SYS_NDIR_H)" HAVE_NDIR_H="$(HAVE_NDIR_H)" UTIME="$(UTIME)" STRUCTURED_QUERIES="$(STRUCTURED_QUERIES)" ISO_CHAR_SET="$(ISO_CHAR_SET)" SFS_COMPAT="$(SFS_COMPAT)" gdbm.h libgdbm.a; \
+		$(INSTALL_FILE) gdbm.h ../include/gdbm.h; \
+		$(INSTALL_FILE) libgdbm.a ../lib/libgdbm.a; \
+		$(RANLIB) ../lib/libgdbm.a \
+	)

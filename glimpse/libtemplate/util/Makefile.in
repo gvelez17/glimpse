@@ -1,0 +1,54 @@
+#
+#  Makefile for the utilities source directory 
+#
+#  $Id: Makefile.in,v 1.2 2001/05/21 04:49:00 golda Exp $
+#
+
+srcdir = @srcdir@
+VPATH  = @srcdir@
+prefix = @prefix@
+INSTALL_BINDIR	= $(prefix)/bin
+INSTALL_LIBDIR	= $(prefix)/lib
+INSTALL_MANDIR 	= $(prefix)/man
+
+SHELL		= /bin/sh
+CC		= @CC@
+INSTALL		= @INSTALL@
+INSTALL_BIN 	= @INSTALL_PROGRAM@
+INSTALL_FILE 	= @INSTALL_DATA@
+RANLIB		= @RANLIB@
+DEFS            =
+
+DEBUG           =
+INCLUDE         = -I../include
+CFLAGS          = $(DEFS) $(INCLUDE)
+
+LIBFILE         = libutil.a
+LIBDIR		= ../lib
+OBJS		= buffer.o host.o log.o strdup.o system.o strerror.o \
+		string.o xmalloc.o
+
+all:  $(LIBFILE) install-lib
+
+install: all
+
+install-man:
+
+ctags:
+	@ctags -w *.c 
+
+clean:
+	rm -f core *.o $(LIBFILE) tags 
+
+distclean realclean:	clean
+	rm -f Makefile
+
+install-lib:	$(LIBDIR)/$(LIBFILE)
+
+$(LIBDIR)/$(LIBFILE):	$(LIBFILE)
+	$(INSTALL_FILE) $(LIBFILE) $(LIBDIR)/$(LIBFILE)
+	$(RANLIB) $(LIBDIR)/$(LIBFILE)
+
+$(LIBFILE):	$(OBJS)
+	ar r $(LIBFILE) $(OBJS)
+	$(RANLIB) $(LIBFILE)

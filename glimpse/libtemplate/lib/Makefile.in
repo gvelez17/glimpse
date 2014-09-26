@@ -1,0 +1,9 @@
+all:
+
+install:
+
+clean:
+	rm -f *.a core
+
+distclean realclean: clean
+	rm -f Makefile

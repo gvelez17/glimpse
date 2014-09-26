@@ -1,0 +1,165 @@
+We would like to acknowledge the members of harvest-dvl@cs.colorado.edu and
+everyone who had sent valuable bug-reports that helped to make glimpse more
+reliable, portable and easier to use. Especially, we would like to thank
+(in no particular order):
+
+	"Marty Leisner" <leisner@sdsp.mc.xerox.com>
+	"Shirley Brown" <browne@cs.utk.edu>
+	Mark Eichin <eichin@cygnus.com>
+	David Koski <dkoski@cs.wisc.edu>
+	Jose Luis Pino <pino@hubble.eecs.berkeley.edu>
+	James Binkley <jrb@cs.pdx.edu>
+	Benjamin Pierce <bcp@dcs.ed.ac.uk>
+	Chris Dalton <crd@hplb.hpl.hp.com>
+	Rob Hartill <hartill@ooo.lanl.gov>
+	nandu@cs.clemson.edu
+	gmt (Gregg Townsend)
+	Gabe Dalbec <dalbec>
+	Jay Plett <jay@silence.princeton.nj.us>
+	"Ullrich Hustadt" <hustadt@mpi-sb.mpg.de>
+	Pei Cao <pc@cs.Princeton.EDU>
+	Michael Short <mshort@mimir.CS.Berkeley.EDU>
+	Eric Johnson <ejohnson@pmip.dist.maricopa.edu>
+	"Paul L. Clark" <paul>
+	Charlie Stross <charless@sco.com>
+	Daniel Simmons <simmdan@kenya.isu.edu>
+	Andrew Mauer <mauer@mcs.anl.gov>
+	"Curtis K. Wong" <curtis@crl.com>
+	voelker@cs.washington.edu
+	Vladimir G Ivanovic <vladimir@eng.sun.com>
+	Bob Jackson <jackson@stsci.edu>
+	raman@crl.dec.com
+	"Michael S. Hart" <HART@vmd.cso.uiuc.edu>
+	Ray Schnitzler <ras@unipress.com>
+	"David B. Rosen" <rosen@unr.edu>
+	rwk@integra.com
+	jrb@cs.pdx.edu
+	Brian Behlendorf <brian@wired.com>
+	rpe@pastek.cray.com (Roland Piquepaille)
+	Dennis Grinberg <Dennis_Grinberg@missing.link.cs.cmu.edu>
+	Tom Phelps <phelps@ecstasy.cs.berkeley.edu>
+	Eric Grosse <ehg@research.att.com>
+	douglis@research.att.com
+	Jose Luis Pino <pino@hubble.eecs.berkeley.edu>
+	ney@research.att.com
+	joerg@pharmacy.isu.edu (Joerg Senekowitsch)
+	George Hartzell <hartzell@postgres.Berkeley.EDU>
+	Alastair Aitken CLMS <ZPALASTAIR@CLUSTER.NORTH-LONDON.AC.UK>
+	leo@zycad.com (Leo Broukhis)
+	Ray Allis (206) 865-3583 <ray@espresso.rt.cs.boeing.com>
+	Paul Everitt <paul@cminds.com>
+	"Bart J. Parliman" <bartp@acl.lanl.gov>
+	<assar@pdc.kth.se>
+	"Craig Bell (8-321-4036)" <rcbell@VNET.IBM.COM>
+	Vivek Khera <khera@kciLink.com>
+	forman@cs.washington.edu
+	Vladimir Vukicevic <vladimir@intrepid.com>
+	barry@hal.com (Barry Bakalor)
+	"Paul Pomes" <p-pomes@mirage.cso.uiuc.edu>
+	Luca Toldo <TOLDO@EMBL-Heidelberg.DE>
+	em@free.net (Evgeny Mironov)
+	David A. Gernert <zm00522@mchfmsd1.fmso.navy.mil
+	John Kokinis <kokinis@mcs.anl.gov>
+	Kent Lewallen <kent@cadence.com>
+	"Gregory R. Olsen" <olsen@cs.stanford.edu>
+	Andries.Brouwer@cwi.nl
+	Edgar Nielsen <edgar@tlg.org>
+	travis.winfrey@fi.gs.com (Travis Winfrey)
+	Roy C Bixler <rcb@press-gopher.uchicago.edu>
+	John Cordell <johnc@pencom.com>
+	Bill Allocca <allocca@OpenMarket.com>
+	dws@ssec.wisc.edu (DaviD W. Sanderson)
+	barry@hal.com (Barry Bakalor)
+	"Paul Pomes" <p-pomes@mirage.cso.uiuc.edu>
+	vogelke@c-17igp.wpafb.af.mil
+	Mark Metson (aa332@cfn.cs.dal.ca, gpurdy@fox.nstn.ns.ca)
+	aeb@cwi.nl
+	beebe@math.utah.edu (Nelson H. F. Beebe)
+	jcasler@vnet.IBM.COM
+	eaddy@scri.fsu.edu
+	zeidenbe@ssc.wisc.edu
+	seavey@OpenMarket.co
+	dshaw@aplcomm.jhuapl.edu
+	nandu@longs.att.com
+	gencela@lafcol.lafayette.edu
+	Keith Waclena <keith@neuromancer.lib.uchicago.edu>
+	"Charles F. Randall" <cfrandal@iastate.edu>
+	Peter Marks - <marks@halcyon.com>
+	mark.dohm@teldta.com (Mark Dohm)
+	"Daniel P. Zepeda" <daniel.zepeda@waii.com>
+	Binh Nguyen <bpn@remus.rutgers.edu>
+	Alan Cunningham <cunnida@spacelink.msfc.nasa.gov>
+	Ron Courtright rcourt@infinity.com
+	jarausch@igpm.igpm.rwth-aachen.de (Helmut Jarausch)
+	Dave Van Horn <davevh@lectura.CS.Arizona.EDU>
+	Alan.Harder@corp.sun.com
+	Travis Taylor travis@ink2.ink.org
+	Francesco Ruta <ruta@asi.it>
+	ew@senate.be (Emmanuel Willems)
+	"William Jaynes" <jaynes@umich.edu>
+	ohst@informatik.hu-berlin.de (Daniel Ohst)
+	Kurt Leinbach <leinbach@maricopa.edu>
+	Pierre Violet <Pierre.Violet@edelweb.fr>
+	Henrik.Martin@eua.ericsson.se (8 bit clean)
+	gross@stimpy.ame.nd.edu (George B. Ross)
+	Jim Meyering <meyering@comco.com>
+	roger Firth <rqf@concurrent.co.uk>
+	Chet Murthy <chet@watson.ibm.com>
+	Todd White at RADium Technology Centre (Canada)
+	stamer@merlin.physik.uni-oldenburg.DE (Heinrich Stamerjohanns)
+	"CHRISM" <cmelikian@VNET.IBM.COM> (0)
+	Jim Hurley <hurleyj@arachnaut.org>
+	"Piroz Mohseni" <mohseni@shemp.tip.ameslab.gov>
+	Cici.Mills@digicool.com (Ci-ci Mills)
+	kaj.hejer@usit.uio.no (Kaj Hejer)
+	Jonathan Shakes <jshakes@cs.washington.edu>
+	jrochkin@cs.oberlin.edu (Jonathan Rochkind)
+	feyrer@rfhs1012.fh.uni-regensburg.de (Hubert Feyrer)
+	Sudha Vaidyanathan <sudha@it.hq.nasa.gov>
+	Urmo Maeorg <urxx@saturn.zzz.ee>
+	Tarvi Martens <tarvi@ioc.ee>
+	ericwolf@iquest.net (Eric Wolf)
+	"O.Bartunov" <megera@sai.msu.su>
+	Daniel Miles Kehoe <kehoe@office.fortuity.com>
+	Brett Bendickson <bbendick@UAInfo.arizona.edu>
+	Yvan Leclerc <leclerc@Moose.AI.SRI.COM>
+	celuszak@bc-ad.bc.ca (Tom Celuszak)
+	charles <charles@fma.com>
+	Tony Sprinzl <sl@iuinfo.tuwien.ac.at>
+	Tai Jin <tai@nexus.hpl.hp.com>
+	Volker Ossenkopf <ossk@astro.uni-jena.de>
+	bentson@grieg.seaslug.org (Randolph Bentson)
+	koechlin@krug.inria.fr (Bruno Koechlin)
+	"Steven J. Beaty" <beaty@mtu.edu>
+	djk@clara.leather.chbi.co.uk ()
+	wysenet@iah.com (Larry E. Culver)
+	Steve Karlovsky <karlovsky@anl.gov>
+	Duncan Fraser <djf@mda.ca>
+	Doug Cooper <doug@nwg.nectec.or.th>
+	Marc Paquette <Marc.Paquette@Softimage.COM>
+	Keith Porterfield <kwp@taliesin.manymedia.com>
+	glenn@rockie.nsc.com (Glenn Newell)
+	Emil Sit <sit@MIT.EDU>
+	ada@mail2.umu.se Christer Holgersson
+	Larry Schwimmer schwim@cyclone.stanford.edu
+	Fred Douglis <douglis@research.att.com>
+	"Phil Kaslo" <phil@cs.arizona.edu>
+	"Achim Bohnet" <ach@rosat.mpe-garching.mpg.de>
+	Alf-Christian Achilles <achilles@ira.uka.de>
+	p.d.stitt.kid0110@oasis.icl.co.uk
+	Dachuan Zhang <zdc@cs.arizona.edu>
+	Howard Fear <hsf@sweng.stortek.com> hsf@pagelus.com
+	VaX#n8 <vax@linkdead.paranoia.com>
+	Edwin Inglis <ejia@wco.com>
+	Thomas Gries  gries@epo.e-mail.com, gries@ibm.net
+	Gerald Wildgruber, gewil@ue801be.ppp
+	Davis Houlton <houlton@sddt.com>
+	SHIOZAKI Takehiko <takehi-s@ascii.co.jp>
+	Jochen Schwarze <schwarze@isa.de>
+	wolinski@caissedesdepots.fr (Francis Wolinski)
+	tobega@x.fra.se
+	"David L. Fielding" <fielding@CS.Cornell.EDU>
+	wjones@tc.fluke.com (Warren Jones)
+	vlad@mars.tecnomatix.com (Vlad Agranovsky)
+
+Udi Manber, Sun Wu and Burra Gopal

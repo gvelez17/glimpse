@@ -1,0 +1,139 @@
+/* Copyright (c) 1994 Sun Wu, Udi Manber, Burra Gopal.  All Rights Reserved. */
+This is version 4.1 of the glimpse package - a tool to search
+entire file systems.  Please send any comments to glimpse@cs.arizona.edu.
+Check the file CHANGES for the changes since version 3.0 (there are
+many of them) and 4.0 (there are few).  The files glimpse.1, glimpseindex.1,
+and glimpseserver.1 are the manual pages.
+
+Instructions for installing glimpse, glimpseindex, glimpseserver, and agrep:
+
+1. Both the agrep and index directories have individual Makefiles 
+   which you can use independently. You can make everything 
+   by just typing make in the root glimpse directory.  Sample Makefiles for
+   various architectures have been provided; some have not been tested
+   recently.
+
+   We have a script "configure" in our distribution which has recently been
+   very much improved.  To generate makefiles for your system, run 
+
+	sh configure
+
+        ( see ./configure --help for options )
+
+   Then run
+
+	make
+	make install
+
+   to put binaries under /usr/local/bin.  To install to a different directory, 
+   see the --prefix and --bindir options of configure.  
+
+   This configure script has been tested successfully on
+
+    Linux-2.4.2 gcc-2.96 RedHat-7.1
+    Linux-2.2.16 egcs-2.91.66 RedHat-6.2
+    Linux-2.2.12 gcc-2.8.1 
+    Fedora 8 (Linux)
+    Solaris-2.5.1 gcc-2.7.2.1
+    SunOS-4.1.3 gcc-2.8.0
+    AIX-3.4 cc
+
+2. To make individual binaries in a subdirectory "ddd", do the following:
+	cd ./ddd ; make ; cd ..
+
+3. To rebuild everything from scratch, do the following:
+	make clean
+   You can then proceed with the above steps.
+
+4. The directory libtemplate contains code that was originally part of the
+   Harvest source distribution.  We believe the configuration there will
+   work on all systems, but there are remnants of the Harvest configuration
+   system still present.  Don't be confused by them; they aren't used.
+
+5. Binaries for	several operating systems are available; see the download
+   webpage (http://webglimpse.net/download.html) for details.
+   
+NOTES:
+------
+
+   People in our mailing list have commented that the make files we provide
+   work on many other architectures too. We recommend that you do a pairwise
+   "diff" of these makefiles to find out whether they support the options you
+   need before trying to modify makefiles to suit your environment. Often a
+   few changes to compiler options, etc., are enough to port glimpse to a
+   new architecture / OS. Source code modifications are usually not necessary.
+
+   We request you to mail us any changes to the Makefile (or the source) that
+   are necessary to port glimpse to your architecture, and the corresponding
+   binaries, so that we can include it in our distribution. We will appreciate
+   any suggestions and will duly acknowledge all contributions.
+
+Some comments about portability (using the sample Makefiles):
+-------------------------------------------------------------
+
+6. You must define HAVE_DIRENT_H in agrep/Makefile, index/Makefile, compress/Makefile
+   to be 1 or 0 depending on whether your machine has /usr/include/dirent.h
+   or /usr/include/sys/dir.h. We found that on most machines/OSs like SunOS4.1,
+   Solaris, Ultrix, AIX, OSF/1, HPUX and SGI IRIX 5.3, HAVE_DIRENT_H should be 1.
+   On NeXT, HAVE_SYS_DIR_H should be 1 (the rest should be 0).
+
+7. On Solaris, "RANLIB" should be define to be "true" in
+   agrep/Makefile.solaris and compress/Makefile.solaris.
+
+8. On Solaris (at least the version we have), the library archive 
+   program "ar" is in /usr/ccs/bin/ar instead of /usr/bin/ar. 
+   You must define "AR" in agrep/Makefile.solaris and compress/Makefile.solaris
+   appropriately or set your PATH to include the appropriate directory name.
+
+9. On Solaris you have to link the glimpse executables with the
+   socket and nls libraries by specifying "-lsocket" and "-lnsl" to the
+   make rules for "glimpse" and "glimpseserver".
+
+10. On the DEC ALPHA and HP, the make variable "CC" was changed from
+   "gcc" to "cc".
+
+11. If you have the utime() routine and <utime.h>, define the make variable
+   UTIME to 1 in glimpse/Makefile and compress/Makefile. Else define it to 0.
+
+12. If you want to support the international character set (ISO_CHAR_SET), define
+   the make variable ISO_CHAR_SET to 1 in glimpse/Makefile. Else define it to 0.
+
+13. If you have the function strerr() on your system, #define HAVE_STRERROR to 1
+   in libtemplate/autoconf.h, else #undef it (or leave the definition in /**/).
+   This is necessary on some BSD systems (some of our users have said so)
+   and on NeXT (Gerald Wildgruber, gewil@ue801be.ppp).  And on Irix 6.*,
+   although the warning you get from the loader seems to be benign.
+
+14. If you need to add any new macros or flags, you can edit the file:
+	glimpse/agrep/config.h
+   and add whatever is needed to make porting easy on your machine / OS.
+   This file is included throughout glimpse source code.
+
+15. On BSD, it may be necessary to define DONTUSESORT_T_OPTION in the
+   Makefile for glimpseindex since -T in some BSD systems is defined as
+   an alternative record separator rather than to specify a directory
+   other than /tmp to store sort-temporary files.
+    
+
+Porting to other platforms:
+--------------------------
+We provide, but do not support, pre-compiled glimpse binaries for a variety
+of systems; see the glimpse web page for details.  If you port glimpse to
+a system and are willing to provide binaries for it, send mail to
+glimpse@cs.arizona.edu.
+
+Makefiles for previous versions of glimpse on the following platforms have
+been provided by these people.  We do not have these systems available to
+us, so are unable to verify that they work with the current version, but
+they should be a good starting point.
+
+ Platform ported to      Person to contact
+AIX-3.2.5            stamer@merlin.physik.uni-oldenburg.DE (Heinrich Stamerjohanns)
+HPPA, HPMC68K        Chris Dalton <crd@hplb.hpl.hp.com>
+IBM-RS6000           "CHRISM" <cmelikian@VNET.IBM.COM> (0)
+NeXT                 gross@stimpy.ame.nd.edu
+
+Thanks for your interest in glimpse.
+
+Udi Manber, Burra Gopal, and Sun Wu.
+

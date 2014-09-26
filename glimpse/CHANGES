@@ -1,0 +1,302 @@
+
+Manually edited CHANGES file - now out of date.
+
+See ChangeLog for latest update information.
+
+Some notes from Peter on checking the code into RCS and some fixes to 4.1 are
+appended to the bottom of this file.
+
+4.12.5 --> 4.12.6
+- Fixes to configure script, thanks to Michael Heironimus
+- Fixes to index/partition.c, index/io.c and index/build_in.c should resolve
+  problem with missing hits on the first one or two keywords in the index. 
+  Thanks to Morey Hubin.
+- Fix to sgrep.c solves problem of double-hit count with record delimiters.
+  M. Hubin. 
+4.11 --> 4.12.5
+  Fix for using filters with structured indexes.  
+  Added FILE_END_MARK constant so it is possible to configure for filenames with spaces
+  Test-fix for core dump on large indexes (may not have solved problem).
+4.1 --> 4.11
+  Fix for core dump on merge, cleanup makefiles.
+4.0 --> 4.1
+- Minor bug fixes and cleanup preparatory to final glimpse release.
+3.6 --> 4.0
+- Added support to extract titles from HTML pages in glimpseindex with
+  the -X option. These files must have names that end in:
+	html, htm, shtml, shtm
+  (It is easy to extend these -- just see glimpse.h/EXTRACT_INFO_SUFFIX.
+  The routine to extract titles is index/filetype.c/extract_info(). This
+  can be modified in various ways to extract info from many filetypes.)
+  The titles are appended to the corresponding filenames after a ' ',
+  before storing the filenames in .glimpse_filenames. In this case,
+  glimpseindex assumes that filenames don't have spaces in them.
+- Added support to glimpseindex to store not just the names of files that
+  are indexed, but also some extra information (like a URL) after each file,
+  when -F is used to provide the names of the files to be indexed to
+  glimpseindex. This will be stored in .glimpse_filenames and
+  .glimpse_filehash. The information (URL) must be separated from the
+  actual file name by one blank ' '. In this case too, glimpse assumes that
+  filenames don't have spaces in them.
+- Added a -U option to glimpse to be able to interpret indices created
+  with a -X or a -U option in glimpseindex. This is necessary since
+  glimpse must know that the first ' ' (see above) siginifies the end of
+  the filename in .glimpse_filenames. When glimpse outputs matches, it
+  will display the filename, the URL, and the title automatically.
+  The user must be able to parse this info properly though!
+- Added an option -X to glimpse to just output the names of files that
+  do contain a match, in case glimpse is not able to open the file for
+  reading. Without the -X option, glimpse will simply ignore the file
+  and continue.
+- Added "wgconvert", a program to compress and decompress neighborhoods
+  in webglimpse. It can also be used to convert a file of filenames (that's
+  used as a parameter for the -f option in glimpse) to a smaller binary
+  representation, and vice versa. See file "index/convert.c". (9-10/96).
+  The compression can change a filenames file to a file containing a
+  bit mask representaion of the set of files, or to a file containing a
+  sparse set representation of these files. We recommend sparse-sets only.
+- Added support in glimpse to read not just a set of filenames (with a
+  -f option), but also a compressed set of filenames (with the -p
+  option). The -p option allows you to utilize compressed `neighborhoods'
+  (sets of filenames) to limit your search, without uncompressing them.
+  The usage is:
+	"-p filename:X:Y:Z"
+  where "filename" is the file with compressed neighborhoods, X is an
+  offset into that file (usually 0, must be a multiple of sizeof(int)),
+  Y is the length glimpse must access from that file (if 0, then whole file;
+  must be a multiple of sizeof(int)), and Z must be 2 (it indicates
+  that "filename" has the sparse-set representation of compressed
+  neighborhoods: the other values are for internal use only). Note that
+  any colon ":" in filename must be escaped using a backslash \.
+- Added limited support for NOT in glimpse. This works with index search (-N)
+  or whole file scope for booleans (-W) only. (11/96).
+  "Not" can be specified using "~". "Not" is most useful in expressions
+  like "bad;~boy" or "woman,~girl"; or in "global not" expressions like
+  "~{bad;boy}" or "~{woman,girl}".  The semantics of ~ is as follows:
+  the ~ works exactly as you would expect for index search (-N).
+  For actual output, you will get all records with at least one of the
+  specified patterns (bad, boy, woman, girl), that satisfy the boolean
+  expression. That is, for example, "bad;~boy" will give you all records
+  that contain "bad" but not "boy", in all files that contain "bad" but
+  not "boy". However, if you search for "~{bad;boy}", glimpse/agrep will
+  NOT output records that don't contain either bad or boy. They will only
+  give you records that contain alteast one of "bad" or "boy" but not both.
+  This is logical since otherwise, a pattern like "~ZZZZIYIUYIUYIUYRR",
+  for example, would force glimpse to output all records in all files...
+  For index-search and actual file-search to be consistent, a ~ should
+  be used only with -W. Glimpse exits with an error otherwise.
+  Agrep can now also search for nots, and the semantics are the same
+  as above, except that the boolean expressions are evaluated on a per-
+  record basis, rather than a per-file basis like glimpse.
+- Added support to search for patterns with repeating strings (11/96):
+        "{computer;science},{computer;chronicles}"
+  This now works in agrep as well as glimpse. However, its for simple
+  patterns only (i.e., no regexp or spelling-errors). Previously,
+  you were forced to say "{computer;{science,chronicles}}". This also
+  fixes the "bug" where queries like "url=pat1;content=pat1" in Harvest
+  did not work (the same pattern pat1 appears twice).
+- Fixed some nagging memory leaks and segfaults on Solaris (10/96).
+- Fixed multiple matches / missed matches problems with -W (11/96).
+
+3.5 --> 3.6
+- Many bug fixes and performance improvements to support webglimpse
+- A -R option to glimpseindex to recompute .glimpse_filenames_index from
+  a changed .glimpse_filenames. This allows users to move the index from one
+  file system to another (where the absolute pathnames of the same files can
+  be different), or convert all absolute pathnames .glimpse_filenames to
+  relative pathnames, and still use the existing index of that data.
+
+3.0 --> 3.5
+- added "-f filename" option to glimpse: it allows you to restrict the
+  search to only those files whose names appear in "filename".
+- fixed the agrep bug where -n was not working with ISO characters.
+- Added -t to glimpseindex that sorts .glimpse_filenames by decreasing order
+  of modify time (st_mtime in stat structure);
+- Added -j option to glimpse to print time of file along with its name;
+- Added "-Y days" option to print files that were modified "days" before
+  the index was created.
+- Added support for arbitrary characters in filenames (e.g. >, <, space, &...)
+
+2.1 ---> 3.0
+
+- added a data structure (in .glimpse_turbo) that speeds up queries
+  using -w and -i considerably for large indexes.  It is meant mostly for
+  servers using glimpse (e.g., Harvest and glimpseHTTP servers),
+  but it benefits everyone.  With this "turbo" option, typical queries
+  take less than a second even for very large indexes.
+  This was so successful that we made it the default rather than an
+  option (it used to be -T in some earlier versions).
+  If the .glimpse_turbo file is deleted, glimpse will still work properly
+  (but glimpseindex -f and -a require it).
+- incremental indexing is now fully supported (even for -b).  Deletion
+  from the index is supported.  glimpseindex -d filename(s) completely
+  deletes the files from the index;  glimpseindex -D filename(s) deletes
+  the files only from the file list.
+- the index has been improved in several ways (transparently except for
+  speed and space).  As a result, indices built with earlier versions of
+  glimpseindex will not work with 3.0 -- you must reindex again. 
+- several options were added to glimpseindex and glimpse:
+  glimpseindex -E indexes all file without attempting to run the filetype
+  filtering (but excluded files or suffixes still apply).
+  glimpse -Q extends -N in a nice way giving much more information about
+  the matches in the index.
+  glimpse -L has more options:  -L x | x:y | x:y:z
+  if one number is given, it is a limit on the total number of matches.
+  Glimpse outputs only the first x matches.
+  If two numbers are given (x:y), then y is an added limit on the total
+  number of files.
+  If three numbers are given (x:y:z), then z is an added limit on the
+  number of matches per file.
+  If any of the x, y, or z is set to 0, it means to ignore it
+  (in other words 0 = infinity in this case);  for example,
+  -L 0:10 will output all matches to the first 10 files that
+  contain a match.
+  (There are also some undocumented-as-yet options. We are running out
+  of letters.  Only -j and -Y are not used!)
+- glimpse 3.0 still has a LOT of makefiles (one per architecture / OS). 
+  We hope to include autoconf support for glimpse in the future: 
+  but these should be sufficient for most purposes.
+- several bugs were fixed, and the whole package is now more portable.
+  Binaries and make files for the following platforms are now available:
+  AIX-3.2.5, HPPA, HPMC68K, IBM-RS6000, Linux, SGI. (Binaries and make
+  files for SUNOS4.1.1, SUNOS4.1.3, SOLARIS 5.3 and DEC OSF/1 (ALPHA)
+  are avaialable as usual.) See README.install for more details.
+
+
+2.0 ---> 2.1
+
+- Added the facility to run a glimpse server which reads the index into 
+  memory and stays in the background.  Regular glimpse then submits queries 
+  to the server and echoes the replies.  This can improve performance if 
+  the index is large since it doesn't have to be read-in for each query.
+  Glimpse can contact (local or remote) servers using the -C, -J and -K
+  options (see the man-pages for more details).
+- Optimized the performance of glimpse for very large structured indexes:
+  this is mostly relevant in Harvest.1.1.  Such indexes now take half the
+  space, the indexing can be done in half the time, and structured queries
+  are faster by a factor of 2 to 5!
+- Made code more portable: the code now runs on the following machines
+  and operating systems:
+	SUNOS
+	ALPHA
+	SOLARIS
+	HPUX
+	AIX
+	LINUX
+- Added much improved man pages for glimpse, glimpseserver and glimpseindex.
+- Many bugs were fixed based on the reports received for glimpse.2.0
+  and Harvest.1.0. The code is now more robust, portable and readable.
+
+
+1.1 ---> 2.0
+
+- A "byte-level" indexing (glimpseindex -b) has been added, which mimics 
+  regular inverted indexes in that the exact location of each occurrence 
+  of each word (except for a stop list of common words) is indexed.  
+  The index itself is still searched with agrep so all options are still
+  available.  This option speeds up the search, sometimes considerably.
+- Added customizable filtering support -z to glimpseindex and glimpse. 
+  glimpseindex -z consults the file .glimpse_filters and performs the
+  programs listed there for each match.  The best example is
+  compress/decompress.  If .glimpse_filters include the line
+  *.Z	uncompress <
+  then before indexing any file that matches the pattern "*.Z" (same
+  syntax as the one for .glimpse_exclude) the command listed is
+  executed first (assuming input is from stdin, which is why uncompress 
+  needs <) and its output (assuming it goes to stdout) is indexed.
+  The file itself is not changed (i.e., it stays compressed).
+  Then if glimpse -z is used, the same program is used on these files
+  on the fly.  Any program can be used (we run 'exec').  For example,
+  one can filter out parts of files that should not be indexed.
+  Note that this can slow down the search because the filters need to
+  be run before files are searched.
+- There is a new compression package that allows glimpse (and agrep)
+  to search DIRECTLY in compressed files.  A new compression routine,
+  called cast, is included.  Also, glimpseindex can automatically index
+  files compressed with cast. More details on this will be published later.
+- Queries can now include arbitrary combinations of ANDs, ORs, NOTs.
+- Added option -F in cast, uncast, buildcast and glimpseindex to take
+  filenames from stdin.
+- Added a -L x option to glimpse to output only the first x matches.
+- User can explicitly specify whether exclude or include has higher priority
+  (the default is to prefer exclude, glimpseindex -i gives priority to
+  include).
+  For example, you can put * in .glimpse_exclude and then explicitly
+  say which files you want to include.
+- Added a -S x option to glimpseindex to allow the user to adjust the size 
+  of the stop-list under -o and -b.  
+- Added a -W option to change the scope of Boolean queries to be the
+  whole file.
+- Added support for structured queries in glimpse/glimpseindex
+  (This was done for the Harvest project.)
+- Many small corrections were made based on the bug-reports received for
+  version 1.1 and the beta version of 2.0.
+
+
+1.0 ---> 1.1
+
+- Names of files/directories whose ABSOLUTE path names are given as input to
+  glimpseindex are indexed "as they are". If their RELATIVE path names are
+  given, THEN glimpseindex tries to construct their absolute path names. Path
+  names are still absolute: they are NOT relative to where the index is stored.
+- A new faster mgrep() (multi pattern search) has been added to agrep.
+- Boolean search by glimpse is now faster: it uses the new mgrep routine and
+  the limit on the number of simple patterns separated by boolean operations
+  is no longer 32 (it is 256 = maximum pattern length).
+- The maximum number of files which can be indexed at one go has been increased
+  from 16000 to around 65000.
+- Many small corrections were made based on the bug-reports received for
+  version 1.0.
+
+
+
+
+# /cs/usi/glimpse/ChangeLog
+# $Id: CHANGES,v 1.4 2000/08/16 04:23:00 golda Exp $
+# Created: Tue Apr  7 08:54:27 1998
+# Peter A. Bigot
+#
+# Description:
+# Master source area for glimpse indexing system.
+
+
+Tue Apr  7 08:54:27 1998  Peter A. Bigot  (pab@thalia.CS.Arizona.EDU)
+
+    * Generated this area from the glimpse-4.1 source release.  All files
+    checked in as version 1.1, and tagged with symbolic name "r4-1"
+    thusly:
+    
+    % for f in `find . -name RCS` ; do \
+         (cd `dirname $f`; rcs -nr4-1: RCS/*) ; \
+      done
+
+    * Patches are in ./Patches.
+
+    * Applied glimpse-4.1-4.1b.patch; log in plog-4.1-4.1b.  System
+    incorrectly attempted to patch ./defs.h instead of ./compress/defs.h;
+    applied that one by hand.  This patch combines Burra's changes with
+    some general cleanup; see the patch file for details.  These changes
+    checked in and tagged as symbolic name r4-1b.  agrep/agrep.h:1.2;
+    ./get_index.c:1.2; ./main.c:1.2; ./agrep/compat.c:1.2;
+    ./agrep/newmgrep.c:1.2; ./compress/cast.c:1.2; ./compress/defs.h :1.2;
+    ./compress/main_tbuild.c:1.2; ./compress/tsimpletest.c:1.2;
+    ./index/build_in.c:1.2; ./index/convert.c:1.2; ./index/filetype.c:1.2;
+    ./index/glimpse.c:1.2; ./index/region.c:1.2; ./index/simpletest.c:1.2.
+
+    * Built and applied glimpse-4.1b-4.1c-patch.  This fixes a problem
+    when the last line of the file does not end in a newline.
+    ./agrep/agrep.c:1.2; ./agrep/bitap.c:1.2; ./agrep/io.c:1.2;
+    ./agrep/newmgrep.c:1.3; ./index/build_in.c:1.3.
+
+
+Thu Aug 20 15:03:08 1998  Peter A. Bigot  (pab@thalia.CS.Arizona.EDU)
+
+    * (index/{glimpse.c,Makefile.linux}) Fix bug involving the TEMP_DIR
+    fixes: syntax error in glimpse.c, need to define variable when
+    building buildcast.  1.{4,2}.
+
+    * (KNOWN_BUGS) Added this file which contains information on how to
+    duplicate bugs that we know exist, but haven't figured out how to
+    squash yet.
+    
+

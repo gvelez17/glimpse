@@ -1,0 +1,144 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(get_filename.c)
+AC_CONFIG_HEADER(libtemplate/include/autoconf.h)
+AC_PROG_CC
+
+dnl Check to see where to find ar. -- mkh
+AC_PATH_PROG(AR, ar, ar)
+if test -z "$AR" ; then
+	AC_PATH_PROG(AR, ar, , /usr/ccs/bin/ar)
+	if test -z "$AR" ; then
+		AC_MSG_ERROR([no acceptable ar found in \$PATH:/usr/ccs/bin/ar])
+	fi
+fi
+
+AC_PROG_RANLIB
+AC_PROG_LN_S
+
+dnl configure for dynfilter
+AC_PROG_LEX
+if test "x$LEX" = "xflex" ; then
+	DYNFILTER_TARGET=htuml2txt.so
+	LEXFLAGS="-F -8"
+else
+	DYNFILTER_TARGET=htuml2txt
+	LEXFLAGS=
+fi
+if test "$ac_cv_prog_gcc" = "yes" ; then
+	DYNFILTER_CFLAGS="-O3 -fomit-frame-pointer"
+else
+	DYNFILTER_CFLAGS="-O"
+fi
+if test "`uname`" = "Linux" ; then
+	DYNFILTER=dynfilters
+else
+	DYNFILTER=
+fi
+
+dnl Check for strip, to support the --enable-strip option. -- mkh
+AC_PATH_PROG(STRIP, strip, strip)
+
+dnl Check for cp, this should not be a problem. -- mkh
+AC_PATH_PROG(CP, cp, cp)
+if test -z "$CP" ; then
+	AC_MSG_ERROR([no cp found in \$PATH, something weird is going on.])
+fi
+
+AC_PROG_INSTALL
+dnl Checks for header files.
+AC_HEADER_DIRENT
+#Contribution by VaX#n8 <vax@linkdead.paranoia.com>
+AC_HEADER_STDC
+AC_CHECK_HEADERS(fcntl.h sys/file.h sys/time.h unistd.h sys/select.h)
+dnl XXX sysuh
+AC_CHECK_HEADERS(sys/dir.h sys/ndir.h strerr.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_TIME
+
+dnl #########  compiler characteristics
+AC_C_CONST
+
+dnl Checks for library functions.
+AC_TYPE_SIGNAL
+AC_FUNC_UTIME_NULL
+#AC_CHECK_FUNCS(getcwd gethostname gettimeofday mkdir rmdir select socket strdup strftime strstr)
+# Need this for libtemplate
+AC_CHECK_FUNCS(strdup strerror)
+
+dnl Check for libraries
+# fmod, logb, and frexp are found in -lm on most systems.
+# On HPUX 9.01, -lm does not contain logb, so check for sqrt.
+AC_CHECK_LIB(m, sqrt)
+AC_CHECK_LIB(c, dlopen, , [AC_CHECK_LIB(dl, dlopen, [LIBS="$LIBS -ldl"])])
+#AC_CHECK_LIB(resolv, gethostbyname)
+#AC_CHECK_LIB(nsl, gethostname, [LIBS="$LIBS -lnsl"])
+#AC_CHECK_LIB(socket, setsockopt, [LIBS="$LIBS -lsocket"])
+#Contribution by: Larry Schwimmer schwim@cyclone.stanford.edu
+AC_CHECK_FUNC(connect, , ac_check_socket=1)
+if test "$ac_check_socket" = 1; then
+  AC_CHECK_LIB(socket, main, LIBS="$LIBS -lsocket", ac_check_both=1)
+fi
+if test "$ac_check_both" = 1; then
+  ac_old_libs=$LIBS
+  LIBS="$LIBS -lsocket -lnsl"
+  AC_CHECK_FUNC(accept, checknsl=0, LIBS=$ac_old_libs)
+fi
+AC_CHECK_FUNC(gethostbyname, , AC_CHECK_LIB(nsl, main, [LIBS="$LIBS -lnsl"]))
+
+dnl Optional stuff
+AC_ARG_WITH(file-end-mark,
+	[ --with-file-end-mark=CHAR	use character CHAR as filename delimiter [' '] most often set to '\t' in order to index filenames with spaces; must match Webglimpse setting in lib/wgHeader.pm.],
+	AC_DEFINE_UNQUOTED(FILE_END_MARK,'$withval'),
+	AC_DEFINE(FILE_END_MARK,[' ']))
+
+dnl	AC_DEFINE(FILE_END_MARK, [$withval])
+dnl		TARGET=Sall,
+dnl	AC_DEFINE(FILE_END_MARK, [' '])
+dnl		TARGET=Sall)
+		
+AC_ARG_ENABLE(structured-queries,
+	[  --enable-structured-queries		enable structured queries],
+	AC_DEFINE(STRUCTURED_QUERIES,1)
+		TARGET=Sall,
+	AC_DEFINE(STRUCTURED_QUERIES,0)
+		TARGET=NOTSall)
+AC_ARG_ENABLE(iso-charset,
+	[  --disable-iso-charset			disable iso charset (may be slightly faster if you don't care about upper-ascii characters)],
+	[use_iso=$enablevel],
+	[use_iso=yes])
+AC_ARG_ENABLE(sfs-compat,
+	[  --enable-sfs-compat	Support SFS compatibility],
+	AC_DEFINE(SFS_COMPAT,1),
+	AC_DEFINE(SFS_COMPAT,0))
+AC_ARG_ENABLE(pointer,
+	[  --enable-pointer               blah],
+	,
+	AC_DEFINE(AGREP_POINTER))
+AC_ARG_ENABLE(measure-times,
+	[  --enable-measure-times         blah],
+	AC_DEFINE(MEASURE_TIMES))
+AC_ARG_ENABLE(warnings,
+	[  --enable-warnings              Add -Wall to CFLAGS],
+	[CFLAGS="$CFLAGS -Wall"])
+AC_ARG_ENABLE(strip,
+	[  --enable-strip                 Strip binaries],
+	,
+	[STRIP=""])
+
+if test $use_iso = yes; then
+	AC_DEFINE(ISO_CHAR_SET,1)
+else
+	AC_DEFINE(ISO_CHAR_SET,0)
+fi
+
+
+dnl local substitute
+AC_SUBST(TARGET)
+AC_SUBST(HAVE_STRDUP)
+AC_SUBST(LEXFLAGS)
+AC_SUBST(DYNFILTER_TARGET)
+AC_SUBST(DYNFILTER_CFLAGS)
+AC_SUBST(DYNFILTER)
+
+AC_OUTPUT(Makefile index/Makefile compress/Makefile agrep/Makefile dynfilters/Makefile libtemplate/Makefile libtemplate/util/Makefile libtemplate/template/Makefile libtemplate/lib/Makefile)

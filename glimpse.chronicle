@@ -1,0 +1,62 @@
+0. Created file on 2/May/94
+1. Added patches to main.c to use sizeof(char*) instead of 4 in relevant
+   places. Same for other pointer mallocs.
+   -- bg 2 May 1994
+2. Successfully ported to DEC-ALPHA: changes to routines in agrep/agrep.c
+   -- bg 10 May 1994
+3. Added the new mgrep routine. Removed bugs (pattern too long) related to
+   using shift-or/and algorithm to search for booleans: now it uses mgrep.
+   -- bg 26-30 May 1994
+4. Added delimiter processing even with -f and -m.
+   -- bg 31 May - 2 June 1994
+5. Added structured queries support in June 1994
+   -- Syntax of glimpse:
+	glimpse <options> 'a1=v1,a2=v2...'	(series of ORs)
+	glimpse <options> 'a1=v1;a2=v2...'	(series of ANDs)
+   -- Syntax of glimpseindex:
+	glimpseindex -s <options/files>
+   -- NOTES:
+	v1, v2 etc. must lie within the range of a1, a2, etc., i.e., if
+	a1 is in the region [offset, offset+len] in a file, v1 must lie
+	compleletely within that range.
+	A new glimpse-file called .glimpse_attributes is created to hold
+	the attributes discovered while indexing with -s. A-V searches
+	may not give out an error message if the index is not built with -s.
+6. Added glimpseserver to speed up queries by reading in the index ahead of
+   time, during July 1994.
+7. Integrated compression into glimpse during July 1994. The new option to
+   glimpseindex can now index compressed files (those compressed with tcomp).
+8. Added multipattern search for simple patterns with -w in compressed files
+   during August 1994.
+9. Ability to take input files from command line (-F) (Sep 10/94)
+10. Added byte level index support (Sep 23/94)
+11. Added support for arbitrary boolean expressions (Oct 10/94)
+12. Added support for arbitary filtering with -z option (Oct 94)
+13. Completely integrated glimpseserver into Harvest (Jan 95)
+14. Speeded up structured queries and -W option (filtering) (Feb 95)
+15. Added -W -z support (June 1995)
+16. Added undocumented options for index-search/analysis (SFS_COMPAT, Jun 1995)
+17. Removed bugs related to structured queries and booleans w/ -b (Jul 1995)
+18. Added -z and structured queries support (Aug 1995)
+19. Changed maximum pattern and indexable word sizes (Sep 1995)
+20. Made it portable to various architectures (see README.install, Oct 1995)
+21. Added "-f filename" option to glimpse: it allows you to restrict the
+    search to only those files whose names appear in "filename" (Jan 1996).
+22. Fixed the agrep bug where -n was not working with ISO chars (Jan 1996).
+23. Added -t to glimpseindex that sorts .glimpse_filenames by decreasing order
+    of modify time (st_mtime in stat structure);
+    Added -@ option to glimpse to print time of file along with its name;
+    (Feb 1996)
+24. Added "-Y days" option to print files that were modified "days" before
+    the index was created (Mar 1996).
+25. Added support for handling filenames/directorynames with special characters:
+    they can now have ' " & > <   ! etc., whatever and glimpse works just fine.
+26. Added conversion program for neighborhood manipulation in webglimpse (9/96).
+27. Added limited support for NOT in glimpse (index search or -W only) (11/96).
+28. Added support to search for patterns with repeating strings (11/96):
+	"{computer;science},{computer;chronicles}"
+    This now works in agrep as well as glimpse. However, its for simple
+    patterns only (i.e., no regexp or spelling-errors).
+29. Fixed some nagging memory leaks and segfaults on Solaris (10/96).
+30. Fixed multiple matches / missed matches problems with -W (11/96).
+31. Release of version 4.1 (10/97)

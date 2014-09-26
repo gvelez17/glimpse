@@ -1,0 +1,31 @@
+#!/bin/sh
+# $Id: gentar,v 1.1 1998/04/27 16:11:23 pab Exp $
+#
+# Build a tar file image of this directory, checking out files from RCS.
+
+# What version to build?
+RELVER=${1-DEV}
+srcdir="./glimpse-${RELVER}-src"
+
+# Safety check---don't overwrite existing directory
+if [ -d "${srcdir}" ] ; then
+  echo "$0: Please remove existing source archive ${srcdir}"
+  exit 1
+fi
+
+# Get the hierarchy first
+dirs=`find . -type d`
+# Now create the duplication area
+mkdir ${srcdir}
+cdir=`pwd`
+# Duplicate the directory hierarchy; if the directory has an RCS area,
+# check out its files, then remove the RCS link.
+for d in ${dirs} ; do
+  mkdir -p ${srcdir}/${d}
+  if [ -e ${d}/RCS ] ; then 
+    (cd ${srcdir}/${d} ; ln -s ${cdir}/${d}/RCS ; co -f RCS/* ; rm RCS)
+  fi
+done
+
+# Put all that into a tar file
+tar cf glimpse-${RELVER}-src.tar ${srcdir}

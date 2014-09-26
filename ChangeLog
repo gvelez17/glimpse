@@ -1,0 +1,667 @@
+2006-08-22 10:18  dkreil
+
+	* index/glimpse.h: fixed version number [tt]
+
+2006-03-24 19:36  root
+
+	* index/: asearch.c, ss/hash.c, dir.c: Add "const" to match *exact*
+	type cast requirment
+
+2006-03-24 19:13  root
+
+	* libtemplate/util/: , , , , ate/template.c, host.c: Fix type cast,
+	missing return values
+
+2006-03-20 09:02  root
+
+	* test/check.sh: Fix for compare operator
+
+2006-03-13 15:12  root
+
+	* Makefile: Add check target suite for Makefile
+
+2006-03-13 15:09  root
+
+	* Makefile.NeXT, Makefile.alpha, Makefile.hp, Makefile.linux,
+	Makefile.org, Makefile.rs6000, Makefile.sgi, Makefile.solaris,
+	Makefile.sunos: Add check target to manually generated make files.
+
+2006-03-13 14:31  root
+
+	* test/check.sh: Removed duplicated log path and used $ERROR_LOG
+	instead
+
+2006-03-13 14:27  root
+
+	* test/check.sh: Added code to log errors in tests in case they
+	occur.
+
+2006-03-13 12:35  root
+
+	* main.c: Inital initialization of ret = 0. By default compiler
+	should do it but we need this to suppress warnings
+
+2006-03-13 12:33  root
+
+	* index/io.c: Added type cast to "char *" to suppress warnings
+
+2006-03-10 18:42  root
+
+	* Makefile.in: Fix path to check.sh
+
+2006-03-10 18:32  root
+
+	* sample/check.sh: We don't need sample directory anymore, now we
+	have test directory instead
+
+2006-03-10 18:30  root
+
+	* test/: check.sh, test.txt: Add check target suite, check.sh and
+	test.txt file
+
+2006-03-10 18:28  root
+
+	* Makefile.in: Check target added
+
+2006-03-09 22:03  julian
+
+	* main.c, split.c: remove 2 warnings with main.c (type cast to
+	sockaddr) and warning with split.c (wrong type cast to unsigned
+	char pointer)
+
+2006-02-03 15:04  golda
+
+	* index/glimpse.h: version number...
+
+2006-02-03 10:56  golda
+
+	* README: bug report address
+
+2006-02-03 10:37  golda
+
+	* index/glimpse.c: fix for TEMP_DIR def for buildcast thanks to
+	Kent Mein for noticing!
+
+2006-02-03 10:12  golda
+
+	* Makefile.in: What the hell happened to glimpseindex ?
+
+2006-02-03 09:59  golda
+
+	* libtemplate/include/: ccache.h, template.h, url.h: [no log
+	message]
+
+2006-02-03 09:56  golda
+
+	* libtemplate/include/util.h: Always STRICT_ANSI
+
+2006-02-03 09:53  golda
+
+	* libtemplate/util/log.c: [no log message]
+
+2006-02-03 09:36  golda
+
+	* libtemplate/util/log.c: Never use varargs.h - nowadays we ALWAYS
+	use stdarg.h, any time this century...
+
+2005-08-07 01:35  golda
+
+	* agrep/: agrep.c, preprocess.c: Use MAXREG, not static '30'
+
+2004-11-08 18:02  golda
+
+	* README: version #
+
+2004-06-08 10:07  golda
+
+	* index/: le, ure, , Makefile.in, io.c: Finally using autoconf
+
+2004-06-08 10:02  golda
+
+	* configure.in: finally got right combination of quotes for
+	autoconf...
+
+2004-06-08 09:22  golda
+
+	* sample/check.sh: Adding script for make check as per suggestion
+	from Nelson Beebe
+
+2004-05-30 16:35  golda
+
+	* libtemplate/util/log.c: put varargs.h option back - we thought
+	this woudln't be needed anymore but apparently is on some systems
+
+2003-11-12 22:17  golda
+
+	* libtemplate/: include/util.h, template/template.c, util/buffer.c,
+	util/harvest.c, util/log.c, util/system.c: change name of log()
+	function to glimpselog() so as not to conflict with math.h
+
+2003-11-12 22:16  golda
+
+	* index/glimpse.h: add .abra to list of EXTRACT_INFO_SUFFIX files
+	to look for titles in.	(We preserve the title tag when
+	prefiltering html files)
+
+2003-11-12 22:10  golda
+
+	* dynfilters/htuml2txt.so: [no log message]
+
+2003-11-12 22:10  golda
+
+	* configure, configure.in: Trying to use only autoconf, and not a
+	customized configure script
+
+2003-11-12 21:50  golda
+
+	* main.c: Add support for --help & --version (in a rather cheesy
+	way...)
+
+2003-11-05 18:00  golda
+
+	* index/io.c: Move max_entry check before assigning partition,
+	thanks to Jerrold Leichter for the fix!
+
+2003-11-02 19:40  golda
+
+	* index/glimpse.h: Updating list of suffixes, version # and date
+
+2003-02-06 05:04  golda
+
+	* main.c: Make glimpse -V return 0 (no error), not 1 - thanks to
+	Bob Proulx
+
+2003-02-06 04:46  golda
+
+	* libtemplate/Makefile.hp: Add "-f Makefile.hp" pass down to the
+	next invokation of make as per Bob Proulx
+
+2003-01-25 13:15  golda
+
+	* agrep/agrep.c: Enabled Bestmatch to work with Linenum as per
+	Kevin McGrail (KAM)
+
+2003-01-25 13:09  golda
+
+	* index/glimpse.h: [no log message]
+
+2003-01-25 13:09  golda
+
+	* agrep/compat.c: Enable use of -B option along with -n (linenum)
+	as per Kevin McGrail - probably never should have been disabled in
+	first place
+
+2002-11-29 17:47  golda
+
+	* index/glimpse.h: [no log message]
+
+2002-11-29 17:47  golda
+
+	* agrep/: bitap.c, compat.c, io.c: Fix typo in bitap.c,io.c and
+	compat.c that prevented compiling with --enable-pointers.  Thanks
+	to Clemens Fischer
+	
+	Correct error message about Bestmatch and Linenums, thanks to Kevin
+	McGrail for pointing this out (and possible future fix to allow
+	them to work together)
+
+2002-10-10 22:28  golda
+
+	* index/: build_in.c, io.c, utils.c: There was an error in
+	build_in.c, a typo that prematurely terminated a for loop and
+	resulted in missing hits for common search terms!  Fixed now.  This
+	affected versions from 4.16.2 thru 4.17.0.  If running one of those
+	versions please upgrade to 4.17.1
+
+2002-10-10 22:27  golda
+
+	* dynfilters/htuml2txt.so: [no log message]
+
+2002-09-27 14:41  golda
+
+	* index/: dex.c, checksg.c, compat.c, maskgen.c, preprocess.c,
+	build_in.c, glimpse.c, glimpse.h, partition.c: Should compile now
+	under CYGWIN (v1.3.12 or later)!  Thanks to Tom Hudson for the tip,
+	with the latest cygwin it seems that all that is needed is to add
+	some include <errno.h> lines.  Please report problems or other
+	changes needed!
+
+2002-09-06 01:11  golda
+
+	* glimpse.1, glimpseindex.1, glimpseserver.1: Updated man pages to
+	reflect new URL's, thanks to Kang-Jin Lee for reporting this and
+	providing the new Harvest doc locations.
+
+2002-06-17 23:45  golda
+
+	* index/: filetype.c, glimpse.h, io.c: Finaly fixed segfault bug
+	with large indexes, by increasing size of guilty buffer.  Actually
+	this is better than checking for buffer overrun because if we just
+	stop at overrun we miss hits.  With new size no overruns should be
+	able to occur, that is the correct solution.  Has been tested on
+	two sites that were experiencing the segfault and has fixed
+	problem.
+
+2002-06-17 23:44  golda
+
+	* dynfilters/htuml2txt.so: [no log message]
+
+2002-05-02 21:43  golda
+
+	* index/convert.c: Use system 'mv' command instead of c lib; works
+	better on some linux systems
+
+2002-02-14 17:38  golda
+
+	* index/glimpse.h: Corrected version number
+
+2001-10-13 01:14  golda
+
+	* index/: build_in.c, utils.c: Fix segfault on certain large
+	indexes.  Check that we have enough space in merge_in before adding
+	to it.	In utils.c, when counter can be incremented > once in a
+	loop, make sure we stop in time.
+
+2001-10-13 01:13  golda
+
+	* ChangeLog: Don't need ChangeLog in CVS!
+
+2001-08-20 22:06  golda
+
+	* index/: le, ure, Makefile.in: Added 'INDEXLIBS' configure script
+	variable to include only  -ldl	if needed in index/Makefile
+
+2001-08-20 20:59  golda
+
+	* configure: Trying to get executable set in cvs
+
+2001-08-20 19:56  golda
+
+	* index/Makefile.in: Remove hard ref to -ldl
+
+2001-08-20 19:53  golda
+
+	* Makefile.in, configure: Added check for -ldl rather than
+	including automatically
+
+2001-07-07 23:17  golda
+
+	* README, README.install: Updated instructions for using configure
+	script
+
+2001-07-07 23:06  golda
+
+	* index/glimpse.h: Updated version, url, etc
+
+2001-07-07 23:04  golda
+
+	* index/: le, le.in, Makefile.in: make puts binaries in ./bin
+	subdirectory
+
+2001-07-06 23:37  golda
+
+	* index/glimpse.h: Add '.jhtml' to list of extensions of HTML files
+	(to extract titles from)
+
+2001-07-06 22:47  golda
+
+	* dynfilters/Makefile.in, libtemplate/lib/Makefile.in: Adding
+	"distclean:" option to makefiles
+
+2001-07-05 10:38  golda
+
+	* libtemplate/: lib/Makefile, template/Makefile, util/Makefile:
+	Removing Makefiles from CVS, generated by configure
+
+2001-07-05 10:37  golda
+
+	* libtemplate/include/autoconf.h: autoconf.h should never have been
+	checked into CVS - generated by configure
+
+2001-07-05 10:37  golda
+
+	* agrep/Makefile, compress/Makefile, index/Makefile,
+	libtemplate/Makefile: Removing Makefiles from CVS because they are
+	now generated by configure script
+
+2001-07-05 10:30  golda
+
+	* configure: Corrected help text
+
+2001-07-05 03:32  golda
+
+	* libtemplate/: Makefile, include/autoconf.h,
+	include/autoconf.h.in, template/Makefile, util/Makefile: [no log
+	message]
+
+2001-07-05 03:32  golda
+
+	* index/: ure, glimpse.h: Moved FILE_END_MARK option into configure
+	script (--file-end-mark=) instead of glimpse.h
+
+2001-07-04 13:22  golda
+
+	* libtemplate/: le, efile, akefile.in, le, Makefile,
+	include/autoconf.h, lib/Makefile, lib/Makefile.in,
+	template/Makefile, util/Makefile: [no log message]
+
+2001-07-04 13:22  golda
+
+	* Makefile: Providing Makefile.in for configure script, for
+	dynfilters may or may not work on all systems; we need to add a
+	configure switch to turn them off if necessary.
+
+2001-07-02 21:58  golda
+
+	* agrep/bitap.c: Fix from Dan Slowik to fix line number reporting
+	problem with agrep.
+
+2001-05-20 21:49  golda
+
+	* README.install: [no log message]
+
+2001-05-20 21:48  golda
+
+	* libtemplate/: , c, , , , , le.in, h, c, efile.in, t.c, le.in,
+	t.c, e.h, , k.c, .h, Makefile.in, include/autoconf.h.in,
+	template/Makefile.in, util/Makefile.in: Major fixes to configure
+	script from Sang-yong Suh.  Now it works!
+
+2001-03-05 21:14  golda
+
+	* README: Testing cvs problem
+
+2001-01-03 17:27  golda
+
+	* index/io.c: Added some ifdefs to not use dynamic lib (dlopen)
+	commands when DYNHTMLFILTER is not defined.  Avoids errors on some
+	platforms (BSDi)
+
+2000-12-06 16:11  golda
+
+	* index/: recursive.c, ss/cast.c, ss/trecursive.c, ss/uncast.c,
+	build_in.c, dir.c, filetype.c, glimpse.h, partition.c: Use
+	strerror(errno) instead of arbitrary "permission denied or
+	nonexistent" error message, as suggested by ariel.  Fixes bug #45.
+
+2000-11-16 22:47  golda
+
+	* split.c: Added dirs "lib" and "bin" to repository, also for some
+	reason split.c had never been checked in.
+
+2000-08-15 21:23  golda
+
+	* CHANGES, ChangeLog: Used cvs2cl.pl to generate up-to-date
+	ChangeLog from CVS.  All old manually entered change information is
+	in CHANGES file.
+
+2000-08-15 15:07  golda
+
+	* main.c: tiny formatting change
+
+2000-08-15 15:04  golda
+
+	* main.c: Corrected help output for -t switch
+
+2000-08-14 17:06  golda
+
+	* index/: glimpse.h, io.c: Re-set name of filter file to
+	.glimpse_filters, instead of the temporary name
+	.glimpse_experimental_filters.	This would have caused HTML tags in
+	the output of glimpse 4.13.0a and 4.13.0, unless
+	.glimpse_experimental_filters existed.	Also corrected minor bug
+	introduced in 4.12.6, in reading temp_rdelim (two lines were
+	transposed). Probably didn't affect anything because the default
+	delimiter is normally correct.
+
+2000-07-16 22:34  golda
+
+	* agrep/agrep.h: Changed leaf.attribute to type int to fix pointer
+	to integer compiler warnings.  Was used as int anyway, should not
+	hurt anything.
+
+2000-06-21 13:13  golda
+
+	* COPYRIGHT: [no log message]
+
+2000-05-30 13:01  golda
+
+	* main.c: Corrected usage info for -t option on glimpse
+
+2000-05-25 11:07  golda
+
+	* index/: ters/Makefile.linux, ters/README, ters/htuml2txt.lex,
+	ters/htuml2txt.so, ters/sotest.c, Makefile.linux, glimpse.h, io.c:
+	Added Christian's changes to allow dynamic filters.  I believe this
+	has only been tested on Linux systems.	--GV
+
+2000-05-25 11:06  golda
+
+	* Makefile, Makefile.linux: Added Christian's changes to allow
+	dynamic filters
+
+2000-04-20 13:27  golda
+
+	* index/filetype.c: re-commented out debugging line
+
+2000-03-08 11:51  golda
+
+	* agrep/agrep.c: Patch from Dan Riley to fix glimpseserver crashing
+	problems.  Basically make sure multibuf is always set to NULL after
+	it is freed, and freed before it is et to NULL.  --GV
+
+2000-01-20 06:04  golda
+
+	* index/filetype.c: Added separator char before "xinfo" variable. 
+	This is needed to parse the URL out of the results and correctly
+	make links in webglimpse's output.  Fix as per Victor Gonzales T. 
+	--GV
+
+2000-01-15 23:52  golda
+
+	* index/filetype.c: Corrected problem with multiple-line titles and
+	files with spaces in the names.  FILE_END_MARK was being used in
+	the wrong place, where multiple-line titles were being stuck
+	together.  --GV
+
+2000-01-15 22:47  golda
+
+	* agrep/checksg.c: Don't use mgrep() with delimiters - fix by Morey
+	as per report by Michael O. --GV
+
+2000-01-11 11:34  cpv298
+
+	* index/filetype.c: Fixed a nasty off-by-one error in
+	extract_info() that clobbered memory past the end of arrays.
+	glimpseindex -X should now stop segfaulting.
+
+2000-01-11 11:32  cpv298
+
+	* index/memlook.c: The old version of memlook clobbered data past
+	the end of an array. It also was prone to other buffer overruns.
+	This is a complete rewrite.
+
+2000-01-11 11:23  test
+
+	* README: Testing remote cvs --GV
+
+1999-11-19 01:11  golda
+
+	* libtemplate/util/: strdup.c, strerror.c: Removed sys_nerr and
+	sys_errlist declarations from strerror.c and added sys/types.h to
+	strdup.c as per Nelson Beebe.  Nelson says this fixes build
+	problems on Rhapsody 5.5 and GNU/Linux 2.2.5-22 at least. --GV
+
+1999-11-03 15:41  golda
+
+	* Makefile.linux: Checking in modified Makefile to compile cleanly
+	on Linux.
+
+1999-11-03 15:16  golda
+
+	* index/glimpse.h: Checking in changes to allow spaces in filenames
+	- FILE_END_MARK constant set here.
+
+1999-11-03 15:00  golda
+
+	* main.c: Checking in changes that allow spaces infilenames, using
+	FILE_END_MARK rather than a fixed character (a space) to delimit
+	filenames & extra info.
+
+1999-11-03 14:40  golda
+
+	* libtemplate/: include/autoconf.h.in, include/ccache.h,
+	include/ccache_list.h, include/ccache_queue.h, include/config.h,
+	include/gdbm.h, include/paths.h, include/paths.h.in,
+	include/template.h, include/time_it.h, include/url.h,
+	include/util.h, lib/Makefile.sunos, template/Attributes.html,
+	template/Makefile.NeXT, template/Makefile.alpha,
+	template/Makefile.hp, template/Makefile.in,
+	template/Makefile.linux, template/Makefile.rs6000,
+	template/Makefile.sgi, template/Makefile.solaris,
+	template/Makefile.sunos, template/README, template/cksoif.c,
+	template/iafa2soif.c, template/lsm2soif.c, template/mktemplate,
+	template/netfind2soif.pl, template/pcindex2soif.c,
+	template/print-attr.c, template/print-template.c,
+	template/print-urlrefs.c, template/soif.pl, template/template.c,
+	template/translate-urls.c: Checking into repository
+
+1999-11-03 13:42  golda
+
+	* libtemplate/util/: Makefile.NeXT, Makefile.alpha, Makefile.hp,
+	Makefile.in, Makefile.linux, Makefile.rs6000, Makefile.sgi,
+	Makefile.solaris, Makefile.sunos, README, buffer.c, harvest.c,
+	host.c, log.c, strdup.c, strerror.c, string.c, system.c, xmalloc.c:
+	Updating repository.
+
+1999-11-03 13:41  golda
+
+	* libtemplate/: Makefile.NeXT, Makefile.alpha, Makefile.hp,
+	Makefile.in, Makefile.linux, Makefile.rs6000, Makefile.sgi,
+	Makefile.solaris, Makefile.sunos, README: [no log message]
+
+1999-11-03 13:40  golda
+
+	* compress/: Makefile, Makefile.NeXT, Makefile.alpha, Makefile.hp,
+	Makefile.in, Makefile.linux, Makefile.rs6000, Makefile.sgi,
+	Makefile.solaris, Makefile.sunos, README, cast.c,
+	compress.chronicle, defs.h, hash.c, main_cast.c, main_tbuild.c,
+	main_uncast.c, misc.c, quick.c, string.c, tbuild.c, test.c,
+	tmemlook.c, trecursive.c, tsimpletest.c, uncast.c: Checking files
+	into repostitory.
+
+1999-11-03 13:39  golda
+
+	* index/: Makefile.NeXT, Makefile.alpha, Makefile.hp,
+	Makefile.linux, Makefile.rs6000, Makefile.sgi, Makefile.solaris,
+	Makefile.sunos, README, index.chronicle, region.h: Checking files
+	into repository.
+
+1999-11-03 13:37  golda
+
+	* agrep/: COPYRIGHT, Makefile.NeXT, Makefile.alpha, Makefile.hp,
+	Makefile.linux, Makefile.rs6000, Makefile.sgi, Makefile.solaris,
+	Makefile.sunos, README, agrep.1, agrep.algorithms, agrep.c,
+	agrep.chronicle, agrep.h, asearch.c, asearch1.c, asplit.c, bitap.c,
+	bitap.c.orig, checkfile.c, checkfile.h, checksg.c, compat.c,
+	config.h, contribution.list, defs.h, delim.c, dummyfilters.c,
+	dummysyscalls.c, follow.c, io.c, io.c.orig, main.c, maskgen.c,
+	newmgrep.c, parse.c, preprocess.c, putils.c, re.h, recursive.c,
+	utilities.c: Checking files into repository. --GV
+
+1999-11-03 13:36  golda
+
+	* ChangeLog, KNOWN_BUGS, Makefile.org, config.cache, config.log,
+	config.status, genpatch: Cleaning up repository. --GV
+
+1999-11-01 14:19  golda
+
+	* CHANGES: Changes log - will be obsolete after 11/1/99 --G
+
+1999-11-01 14:19  golda
+
+	* index/: build_in.c, convert.c, filetype.c, io.c, partition.c:
+	Bringing Glimpse 4.12.6 under CVS.  Future changes will be checked
+	in independently. General changes were: 4.12.5 --> 4.12.6 - Fixes
+	to configure script, thanks to Michael Heironimus - Fixes to
+	index/partition.c, index/io.c and index/build_in.c should resolve  
+	problem with missing hits on the first one or two keywords in the
+	index.	  Thanks to Morey Hubin.  - Fix to sgrep.c solves problem
+	of double-hit count with record delimiters.    M. Hubin.  4.11 -->
+	4.12.5	 Fix for using filters with structured indexes.    Added
+	FILE_END_MARK constant so it is possible to configure for filenames
+	with spaces    Test-fix for core dump on large indexes (may not
+	have solved problem).  --G
+
+1999-11-01 14:16  golda
+
+	* index/: Makefile, Makefile.in: Adding makefiles to cvs.
+
+1999-11-01 14:14  golda
+
+	* libtemplate/: lib/Makefile, template/Makefile, util/Makefile:
+	Adding to CVS repository
+
+1999-11-01 14:13  golda
+
+	* libtemplate/Makefile: Adding into new CVS repository
+
+1999-11-01 13:41  golda
+
+	* libtemplate/include/autoconf.h: Added to repository
+
+1999-11-01 13:34  golda
+
+	* CHANGES, Makefile.in, config.cache, config.log, config.status,
+	configure, configure.in: Adding into cvs repository.
+
+1999-11-01 13:33  golda
+
+	* agrep/: Makefile, Makefile.in: Adding into CVS repository.
+
+1999-11-01 13:32  golda
+
+	* agrep/sgrep.c: Adding into CVS repository
+
+1999-05-05 01:16  gvelez
+
+	* Makefile: Adding agrep archive to my CVS repository
+
+1999-05-05 01:12  gvelez
+
+	* main.c: Changes to return value in keeping with man pages: 0 for
+	some hits, 1 for no hits, 2 for error. --GB
+
+1999-03-02 00:38  gvelez
+
+	* index/: build_in.c, convert.c, dir.c, filetype.c, fixname.c,
+	getword.c, glimpse.h, io.c, lib.c, memlook.c, partition.c,
+	region.c, simpletest.c, utils.c: Added index directory to
+	repository
+
+1999-03-02 00:37  gvelez
+
+	* index/glimpse.c: Added default for TEMP_DIR --G
+
+1998-05-22 10:31  udi
+
+	* main.c: changed all /tmp to use TEMP_DIR (for security reasons)
+
+1998-04-27 09:11  pab
+
+	* gentar: Initial revision
+
+1998-04-07 09:17  pab
+
+	* get_index.c, main.c: Patch to rev 4.1b
+
+1998-04-07 08:54  pab
+
+	* CHANGES, CONTRIBUTIONS, COPYRIGHT, Makefile, Makefile.NeXT,
+	Makefile.alpha, Makefile.hp, Makefile.in, Makefile.linux,
+	Makefile.rs6000, Makefile.sgi, Makefile.solaris, Makefile.sunos,
+	README, README.install, communicate.c, configure, configure.in,
+	defs.h, get_filename.c, get_index.c, glimpse.1, glimpse.chronicle,
+	glimpseindex.1, glimpseserver.1, install-sh, main.c, mkinstalldirs,
+	split.c: Initial revision
+

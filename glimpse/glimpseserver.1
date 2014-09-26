@@ -1,0 +1,87 @@
+.TH GLIMPSESERVER l "October 13, 1997"
+.SH NAME
+\fIglimpseserver 4.1\fP - a server version of the glimpse searching package.
+.SH OVERVIEW
+\fIGlimpse\fP 
+is an indexing and query system that allows you to search through
+all your files very quickly.
+The use of glimpse in servers that handle frequent queries
+is growing, which is why we wrote glimpseserver to 
+make searches more efficient.
+Glimpseserver starts a process that listens to queries, runs glimpse,
+and sends the answers back.
+The main advantage is that the index is read only once into memory
+saving a lot of IO.
+Glimpse communicates with glimpseserver through a given port number.
+See the warning about security below.
+.LP
+.SH SYNOPSIS
+.B glimpseserver
+[
+\fB\-H \fIdir\fP \-K \fIport\fP \-J \fIhost\fP.
+]
+.SH "DESCRIPTION"
+.LP
+.TP
+.B \-H \fIdir\fP 
+specifies the directory of the index.  Similar to the \-H option
+of glimpse.
+The default directory is the value of the environment variable $HOME
+if that is set, otherwise it is the current directory.
+.TP
+.B \-K \fIport\fP
+this is the TCP port for communication: glimpseserver waits for requests
+on this port and clients that want to search using the index in
+specified by the \-H option must use this port (by calling 
+glimpse -K).
+The defaults port number is 2001.
+.TP
+.B \-J \fIhost\fP
+the name of the host.  The default is the host where glimpseserver
+is running, which is probably the only possibility anyway.
+.SH "RESTARTING"
+.LP
+If a new index is created by running glimpseindex every night,
+restarting a new glimpseserver is now easier:
+simply send a SIGUSR2 (signal #31 - i.e., "kill -31 pid") to
+glimpseserver; it then re-reads the NEW index and is ready to serve
+requests again. 
+(A SIGHUP, i.e., signal #1, can also be sent instead of SIGUSR2
+to make the glimpseserver re-read the new index.)
+The recommended way to do a fresh indexing while the
+server is still running is:
+.br
+send SIGSTOP to glimpseserver
+.br
+do the indexing
+.br
+send SIGUSR2 to glimpseserver
+.br
+send SIGCONT to glimpseserver (to ask it to continue after stop)
+.br
+The SIGSTOP is required so that glimpseserver doesn't answer any queries
+while the indexing is going on.
+.SH "WARNING"
+.LP
+Glimpseserver should be used only for public servers.
+Any client that knows the port number can get any information
+available in the index (and port numbers are not that secret).
+When glimpse is run as a standalone application it requires read
+permission of the index and all the files.
+When glimpse uses the \-C option to communicate with glimpseserver,
+glimpse (the client) does not require any permission, because glimpseserver
+does all the searching.
+So, we recommend not to run glimpseserver on any data that
+should be protected.
+Glimpseserver is meant to be used for public data.
+.SH "SEE ALSO"
+.BR glimpse (1),
+.BR glimpseindex (1),
+.SH BUGS
+.LP
+Please submit bug reports or comments at http://webglimpse.net/bugzilla/
+.SH AUTHORS
+Udi Manber and Burra Gopal, Department of Computer Science, 
+University of Arizona, and Sun Wu, the National Chung-Cheng University,
+Taiwan. Now maintained by Golda Velez at Internet WorkShop
+(Email:  gvelez@webglimpse.net)

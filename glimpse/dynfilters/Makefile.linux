@@ -1,0 +1,89 @@
+# Set this variable to the name of your C compiler
+CC=gcc
+
+# Provide optimization flages here. These settings are fine for egcs and
+# gcc >= 2.95. If you use an older gcc version, change -O3 to -O2. If you
+# use a non-gcc compiler, change this line to
+# CFLAGS=-O
+CFLAGS=-O3 -fomit-frame-pointer
+
+# Additional definitions you would like to pass to the compiler. You usually
+# can leave this line alone.
+DEFS=
+
+# The name of the linker. Usually, specifying the same name as the C compiler
+# is fine. Change this to "ld" if in doubt.
+LD=$(CC)
+
+# Additional flags you would like to pass to the linker. You usually can leave
+# this line alone.
+LDFLAGS=
+
+# Specify the name of your lex program here. If you have flex installed, it is
+# highly recommended that you leave this line alone. If you use AT&T lex,
+# change this line to "lex". You then also need to change the next variable,
+# see below.
+LEX=flex
+
+# Flags you pass to the lexer. These are flex-specific. If you use AT&T lex,
+# change this line to "LEXFLAGS="
+LEXFLAGS=-F -8
+
+# lex and flex require that you link against an additional library. If you use
+# AT&T lex, change this to "-ll".
+LEXLIB=-lfl
+
+
+# You can ignore the next lines if you do not want to build the filter
+# in a shared library. Unless you take part in the experimental glimpse
+# project that allows filters to be specified in shared libraries, you
+# can leave the rest of the makefile safely alone.
+
+#------------------------------------------------------------------------
+
+# If you build a shared library, some compilers, such as gcc, require you
+# to build "position-independent" (i.e. relocatable) code. Some other
+# compilers do not require anything. Check your compiler manual on how to
+# build shared libraries and clear this line if necessary.
+SHAREDCFLAGS=-fPIC
+
+# This line is passed to the linker, to indicate that it should build a
+# shared library. Consult your compiler manual on how to build shared
+# libraries, and change this line if necessary.
+SHAREDLDFLAGS=-shared
+
+# This line specifies the library, in which the functions for loading
+# a shared library at runtime reside. More specifically, look for the
+# library that defines dlopen, dlsym, and dlclose. 
+DLLIB=-ldl
+
+# Do not change this line
+SHAREDDEFS=-DSHARED_OBJECT
+
+
+htuml2txt: lex.yy.c
+	$(CC) $(CFLAGS) $(DEFS) -c lex.yy.c
+	$(LD) $(LDFLAGS) -o htuml2txt lex.yy.o $(LEXLIB)
+
+htuml2txt.so: lex.yy.c
+	$(CC) $(CFLAGS) $(DEFS) $(SHAREDCFLAGS) $(SHAREDDEFS) -c lex.yy.c
+	$(LD) $(LDFLAGS) $(SHAREDLDFLAGS) -o htuml2txt.so lex.yy.o $(LEXLIB)
+
+sotest: sotest.c
+	$(CC) $(CFLAGS) $(DEFS) -c sotest.c
+	$(LD) $(LDFLAGS) -o sotest sotest.o $(DLLIB)
+
+lex.yy.c: htuml2txt.lex
+	$(LEX) $(LEXFLAGS) htuml2txt.lex
+
+all: htuml2txt htuml2txt.so
+
+clean:
+	rm -f *.o lex.yy.c core
+
+test: all
+	echo "Doing regression test ..."
+
+
+alltest: test sotest
+	echo "Doing extended regression test ... "

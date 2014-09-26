@@ -1,0 +1,86 @@
+These files constitute fixes and enhancements for Webglimpse
+1.7.1. Feel free to contact me at cvogler@gradient.cis.upenn.edu with
+any questions or concerns.
+
+
+Overview:
+=========
+
+htuml2txt.lex    - a set of lex rules intended to replace the functionality 
+                   htuml2txt.pl. Can be built with either flex or an 
+                   8bit-clean AT&T lex.
+
+Makefile.linux   - Makefile for building an optimized htuml2txt on Linux.
+                   Adapting it to other systems should be trivial.
+
+Makefile.flex    - A generic makefile for flex 
+
+Makefile.att     - A generic makefile for AT&T lex variants
+
+makecron.patch   - A small patch that makes sure that the indexing phase
+                   of Webglimpse also uses an HTML filter (html2txt,
+                   htuml2txt, or htuml2txt.pl). It does so by adding the -z
+                   switch to the argument list of glimpseindex.
+
+
+htuml2txt.lex 
+============= 
+
+Description: A faster HTML filter for WebGlimpse than htuml2txt.pl. I
+found that the spawning of all the perl processes by glimpse was way
+too expensive to be practical. In particular, searching 2000 files for
+a frequently occuring term took more than 30 seconds on a
+PII-400/Linux 2.2.5 machine. Rewriting the filter as a set of lex
+rules sped up the search by a factor of 6, which is about on par with
+the plain html2txt filter.
+
+You need either flex(1) from the Free Software Foundation
+(http://www.fsf.org), or an 8bit-clean version of AT&T lex(1) to build
+the filter correctly. Systems that have a C compiler installed usually
+also have at least one of these tools installed. I tested the filter
+successfully on Linux 2.2 (using flex), SGI IRIX 6.4 (using both flex
+and AT&T lex), and Solaris 2.6 (using both flex and AT&T lex).
+
+When in doubt, I recommend using flex. It is freely available, and it
+is much faster and more robust than the AT&T variants of lex.
+
+If you are using Linux and have egcs installed, you can build an
+optimized version of html2txt with this command:
+
+make -f Makefile.linux
+
+Otherwise, if you are using flex on any system, you can build the
+filter with this command:
+
+make -f Makefile.flex
+
+Finally, if you prefer using AT&T lex, you can build the filter with
+this command:
+
+make -f Makefile.att
+
+
+Any of these commands should build the file "htuml2txt". To install and
+use the filter, copy this file to the lib directory in your Webglimpse
+home directory. Also, edit the file ".glimpse_filters" in your
+database directory and replace all occurrences of "htuml2txt.pl" with
+"htuml2txt".
+
+
+makecron.patch
+==============
+
+This is a small patch that ensures that Webglimpse uses the HTML
+filters during index creation. This can greatly reduce the number of
+files that webglimpse has to search. For some search terms, I observed
+a speedup of a factor of 2 with this change.
+
+To apply the patch, change to the webglimpse home directory and run
+this command:
+
+patch -p1 < <directory to which you extracted this README>/makecron.patch
+
+Afterwards, run makecron and reconfigure the archives to make sure
+that the changes propagate to all archives.
+
+

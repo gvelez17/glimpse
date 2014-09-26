@@ -1,0 +1,67 @@
+/* Copyright (c) 1994 Sun Wu, Udi Manber, Burra Gopal.  All Rights Reserved. */
+Started in Aug 1993.
+0. bgopal: The new indexing mechanism is totally different from the original one
+   (written by udi and sun wu) -- the only thing common between the two is the
+   format of the index and the partitioning algorithm (v. simple algo).
+1. Changed pirs.c/main()/line16 to make argc>1 check before accessing argv.
+2. Added a leading bit in the index values to distinguish them from the next
+   word. This was mentioned but never implemented (comment in build_in.c).
+3. Removed simple binary file and uuencoded file testing from filetype.c and
+   put it into a new file simpletest.c so that the compress module can use
+   it too.
+4. Removed tolower in getword() so that I can index Linear, LINEAR and linear
+   depending on the relative frequency. Else, compression becomes a problem.
+5. Added case-check (allupper, alllower, onlyfirstupper-restlower) routine
+   to getword() in getword.c -- does this only in case '-c' was specified.
+6. Modified insert_h() and insert_index() procedures in build_in.c to store
+   the count of words rather than the partition numbers if CountWords == ON.
+7. Modified pirs.c to take the option -c for CountWords instead of gathering
+   partition information (i.e., when we don't want .index_list for searching
+   but for the EXACT frequency of occurrence of different words).
+8. Modified merge_in.c to merge counts of similar words occurring in two
+   different files rather than the partition numbers: the output of build_in
+   when the CountWords option is set is: a word followed by end-of-word-mark
+   followed by a list of (fprintf, not fwrite) counts separated by blanks,
+   ended with a newline.
+9. Changed the files "everywhere" to account for malloc-failures (try again
+   after purging the hash-table once: if fail again, THEN exit).
+A. Changed the algorithm for build_hash -- it did not index all files.
+   Block-copied the code in the inner while loop after the loop-terminates.
+B. Removed leading bit! Now sort gave problems on partiton#0, so ignored
+   partition#0 altogether like partition#'\n' was ignored to figure out the
+   end of the current input line/word.
+C. Removed all references to pirs everywhere: it is now "glimpse" -- 1/28/94.
+D. Bug fixes relating to $HOME not being there in the environment.
+E. Bug fix related to "very small directories" (partitioning algorithm).
+F. Fixed BIG bug related to memory leaks which can cause aborts... not sure if
+   this was the reason for deadlocks (schwartz's bug) but ran ok for 280MB.
+G. Fixed a bug related to very small indices (with one partition only). 
+H. Added a facility to have one file per block, i.e., each file is in one
+   partition all by itself: a MAJOR change was done to many data-structures and
+   encode/decode functions were added so that sort/gets don't get confused.
+   -- bg, 23-30 Mar 1994
+I. In fast index, the old index may be destroyed and built again. In add to
+   index, it is never destroyed: things to it are only added. In add to index,
+   the old guys are NOT checked for modification, etc, and all the new ones are
+   added. Whereas in FastIndex, even the new ones are checked for modification
+   date. In both, non-existent files are removed but the holes are not filled.
+   The fastest way to add a new set of files is to use -f. This is same as
+   saying -f AND -a except that the old index is never rebuilt with -a. (The
+   index MIGHT need rebuilding if it was not found or partitions overflowed.)
+   (Does this make sense? :-)
+   -- bg, 20-22 Apr 1994
+J. Changed STAT, MESSAGE, LOG (filenames) to STATFILE, MESSAGEFILE, LOGFILE
+   to avoid name clashes with some C-lib variables.
+   -- bg, 29 Apr 1994
+K. Changed dir.c and partition.c to take care of absolute path names on the
+   command line itself: now, everything on the command line is forced to be
+   indexed (esp. symlinks which were excluded by default earlier).
+   -- bg, 2 May 1994
+L. Increased maximum number of files that can be indexed to 254*254 = 64516.
+   -- bg, 4 May 1994
+M. Added ability to index structured files during June/July 1994.
+N. Added ability to index compressed files, and automatically create compress
+   dictionaries (for cast) with -z option during Aug 1994.
+O. Added user option -i to make include have higher priority than exclude
+   during Aug 1994.
+P. Completed incremental indexing support during June 1995

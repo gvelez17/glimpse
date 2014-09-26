@@ -1,0 +1,63 @@
+GLIMPSE 4.18: searching entire file systems
+(http://webglimpse.net/)
+(http://glimpse.cs.arizona.edu/)
+
+For installation instructions, see README.install
+
+Glimpse is a very powerful indexing and query system that allows you to
+search through all your files very quickly.  It can be used by
+individuals for their personal file systems as well as by organizations
+for large data collections.  Glimpse is also the basis of WebGlimpse,
+which provides search for web sites, and it is the default search engine 
+in Harvest (see below).
+
+Glimpseindex, which you run by saying "glimpseindex DIR" builds an
+index of all text files in the tree rooted at DIR.  
+(e.g., glimpseindex ~ indexes all your files.) With it, glimpse can
+search through all files much the same way as agrep (or any other
+grep), except that you don't have to specify file names and the search
+is fast.  For example,
+
+	glimpse -1 unbelievable
+
+will find all occurrences (in all your files!) of "unbelievable" 
+allowing one spelling error;
+
+	glimpse -F mail arizona 
+
+will find all occurrences of "arizona" in all files with "mail" somewhere
+in their name;
+
+	glimpse  'Arizona desert;windsurfing' 
+
+will find all lines that contain both "Arizona desert" and "windsurfing".
+
+Glimpse supports three types of indexes: a tiny one (2-3% of the
+size of all files), a small one (7-9%), and a medium one (20-30%).
+The larger the index the faster the search.
+Glimpse supports most of agrep's options (agrep is our powerful version
+of grep, and it is part of glimpse) including approximate matching
+(e.g., finding misspelled words), Boolean queries, and even some
+limited forms of regular expressions.
+
+The WWW home page for glimpse is in
+    http://glimpse.cs.arizona.edu/
+It includes links to the source, binaries for most UNIX systems,
+documentations, articles, and more.
+
+The WebGlimpse home page is in
+    http://glimpse.cs.arizona.edu/webglimpse/
+
+Harvest's WWW home page is
+	http://harvest.cs.colorado.edu/
+(Harvest is an integrated set of tools to gather, extract,
+organize, search, cache, and replicate relevant information
+across the Internet.) 
+
+Mail glimpse-request@cs.arizona.edu to be added to the glimpse mailing list.
+Mail glimpse@cs.arizona.edu to report bugs, ask questions, discuss
+tricks for using glimpse, etc.  (This is a moderated mailing list.)
+
+Udi Manber, Burra Gopal, and Sun Wu.
+
+Please report bugs online at http://webglimpse.net/contact.php 

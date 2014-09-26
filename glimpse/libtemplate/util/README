@@ -1,0 +1,12 @@
+This directory has some generally useful functions.
+
+buffer.c		Buffer management
+host.c			DNS and host-specific routines
+log.c			Simple, uniform logging
+strdup.c		strdup(3) implementation
+strerror.c		strerror(3) implementation
+string.c		string processing
+system.c		routines for running system(3)
+xmalloc.c		wrappers for memory management
+
+-Darren Hardy, July 1994
