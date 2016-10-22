@@ -1,6 +1,13 @@
 /* Copyright (c) 1994 Sun Wu, Udi Manber, Burra Gopal.  All Rights Reserved. */
 This is version 2.04 of agrep - a new tool for fast 
 text searching allowing errors.
+
+NOTE: an actively developed branch of agrep is now maintained at
+
+https://github.com/Wikinaut/agrep/
+
+and is recommended for any standalone use of agrep
+
 agrep is similar to egrep (or grep or fgrep), but it is much more general
 (and usually faster).
 The main changes from version 1.1 are 1) incorporating Boyer-Moore
