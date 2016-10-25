@@ -176,9 +176,9 @@
 #define NUM_EXTRACT_INFO_SUFFIX	9
 
 /* Version and release year: same for glimpse and glimspeindex since glimpse HAS to interpret glimpseindex */
-#define GLIMPSE_VERSION	"4.18.5"
-#define GLIMPSE_DATE	"2006"
-#define GLIMPSE_EMAIL	"glimpse-mail@webglimpse.net"
+#define GLIMPSE_VERSION	"4.18.7"
+#define GLIMPSE_DATE	"2015"
+#define GLIMPSE_EMAIL	"gvelez17@gmail.com"
 #define GLIMPSE_URL	"http://webglimpse.net/"
 
 /* Some extern functions used in structured queries */

@@ -84,6 +84,9 @@ agrep:		$(PROGAGREP)
 NOTSall:	$(NOTSPROG) $(NOTSPROGSERVER)
 
 build-sub:
+# these empty dirs are not in git
+	[ -d $(BINDIR) ] || mkdir $(BINDIR)
+	[ -d $(LIBDIR) ] || mkdir $(LIBDIR)
 	for d in $(SUBDIRS) ; do \
 		( cd $$d; $(MAKE) ); \
 	done
@@ -115,7 +118,7 @@ clean:
 	for d in $(SUBDIRS); do \
 		( cd $$d; $(MAKE) $@ ); \
 	done
-	rm -f main_server.o main_server.c main.o $(OBJS) core a.out $(PROG) $(PROGSERVER) config.log
+	rm -f main_server.o main_server.c main.o $(OBJS) core a.out config.log
 	rm -f $(LIBDIR)/lib$(LIBCOMPRESS).a $(LIBDIR)/lib$(LIBAGREP).a
 	rm -f $(BINDIR)/*
 
